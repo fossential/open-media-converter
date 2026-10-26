@@ -7,6 +7,7 @@
 [![Test CI](https://github.com/albilu/open-media-converter/actions/workflows/test-ci.yml/badge.svg)](https://github.com/albilu/open-media-converter/actions/workflows/test-ci.yml)
 [![Release CI](https://github.com/albilu/open-media-converter/actions/workflows/release-ci.yml/badge.svg)](https://github.com/albilu/open-media-converter/actions/workflows/release-ci.yml)
 [![GitHub release](https://img.shields.io/github/v/release/albilu/open-media-converter)](https://github.com/albilu/open-media-converter/releases)
+[![Downloads](https://img.shields.io/github/downloads/fossential/open-media-converter/total)](https://github.com/fossential/open-media-converter/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Java 23](https://img.shields.io/badge/Java-23-orange.svg)](pom.xml)
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-lightgrey.svg)](packaging/)
