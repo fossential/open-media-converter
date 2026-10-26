@@ -1,4 +1,8 @@
-# Open Media Converter
+<p align="center">
+  <img src="omc-gtk/src/main/resources/icons/hicolor/256x256/apps/open-media-converter.png" width="128" height="128" alt="Open Media Converter icon: circular conversion arrows around media type glyphs on a dark tile">
+</p>
+
+<h1 align="center">Open Media Converter</h1>
 
 [![Test CI](https://github.com/albilu/open-media-converter/actions/workflows/test-ci.yml/badge.svg)](https://github.com/albilu/open-media-converter/actions/workflows/test-ci.yml)
 [![Release CI](https://github.com/albilu/open-media-converter/actions/workflows/release-ci.yml/badge.svg)](https://github.com/albilu/open-media-converter/actions/workflows/release-ci.yml)
