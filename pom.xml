@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.omc</groupId>
     <artifactId>omc</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <packaging>pom</packaging>
     <name>Open Media Converter</name>
     <description>A fully featured media converter GUI for Linux based on FFmpeg, Pandoc, soffice and convert</description>

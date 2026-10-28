@@ -1,41 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32" role="img" aria-labelledby="title description">
   <title id="title">Open Media Converter</title>
-  <desc id="description">Two flowing conversion arrows surround video, audio, image and document symbols, bringing four media types into one application.</desc>
-  <defs>
-    <linearGradient id="surface" x1="28" y1="16" x2="224" y2="240" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#253b50"/>
-      <stop offset="1" stop-color="#142436"/>
-    </linearGradient>
-    <linearGradient id="conversion" x1="42" y1="128" x2="204" y2="52" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#20b1b7"/>
-      <stop offset="1" stop-color="#73f2d0"/>
-    </linearGradient>
-    <linearGradient id="return" x1="42" y1="128" x2="204" y2="52" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#359be3"/>
-      <stop offset="1" stop-color="#96d4ff"/>
-    </linearGradient>
-  </defs>
-  <rect x="12" y="16" width="232" height="232" rx="54" fill="#0c1928"/>
-  <rect x="12" y="8" width="232" height="232" rx="54" fill="url(#surface)"/>
-  <path d="M40 128a88 88 0 0 1 153-59" fill="none" stroke="url(#conversion)" stroke-width="16" stroke-linecap="round"/>
-  <path d="m209 87-29-5 23-23z" fill="#73f2d0" stroke="#73f2d0" stroke-width="3" stroke-linejoin="round"/>
-  <g transform="rotate(180 128 128)">
-    <path d="M40 128a88 88 0 0 1 153-59" fill="none" stroke="url(#return)" stroke-width="16" stroke-linecap="round"/>
-    <path d="m209 87-29-5 23-23z" fill="#96d4ff" stroke="#96d4ff" stroke-width="3" stroke-linejoin="round"/>
-  </g>
-  <g fill="#f5fcff" stroke="#f5fcff" stroke-linecap="round" stroke-linejoin="round">
-    <path id="video" d="m94 88 24 15-24 15z" stroke-width="5"/>
-    <g id="audio" fill="none" stroke-width="6">
-      <path d="M144 98v12m10-21v30m10-24v18"/>
-    </g>
-    <g id="image">
-      <rect x="84" y="138" width="35" height="28" rx="4" fill="none" stroke-width="4.5"/>
-      <circle cx="94" cy="147" r="3" stroke="none"/>
-      <path d="m86 164 12-14 9 9 6-6 4 7v4z" stroke="none"/>
-    </g>
-    <g id="document" fill="none" stroke-width="4.5">
-      <path d="M142 137h16l11 11v19h-27z"/>
-      <path d="M158 137v11h11m-20 7h12m-12 6h9" stroke-width="3.5"/>
-    </g>
-  </g>
+  <desc id="description">White conversion arrows surround red video, blue audio, green image and amber document symbols on a dark rounded tile.</desc>
+  <image width="32" height="32" xlink:href="data:image/png;base64,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"/>
 </svg>

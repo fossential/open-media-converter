@@ -1,19 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24" role="img" aria-labelledby="title description">
   <title id="title">Open Media Converter</title>
-  <desc id="description">Conversion arrows surround video, audio, image and document symbols. Simplified for small icons.</desc>
-  <rect x="1" y="1" width="22" height="22" rx="5" fill="#1b3043"/>
-  <path d="M3.75 12a8.25 8.25 0 0 1 14.4-5.4" fill="none" stroke="#49d9c6" stroke-width="1.8" stroke-linecap="round"/>
-  <path d="m19.75 8.8-3.65-.7 2.55-2.7z" fill="#73f2d0" stroke="#73f2d0" stroke-width=".4" stroke-linejoin="round"/>
-  <g transform="rotate(180 12 12)">
-    <path d="M3.75 12a8.25 8.25 0 0 1 14.4-5.4" fill="none" stroke="#67b9f1" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="m19.75 8.8-3.65-.7 2.55-2.7z" fill="#96d4ff" stroke="#96d4ff" stroke-width=".4" stroke-linejoin="round"/>
-  </g>
-  <g fill="#f5fcff" stroke="#f5fcff" stroke-linecap="round" stroke-linejoin="round">
-    <path d="m8.1 8 2.6 1.6-2.6 1.6z" stroke-width=".5"/>
-    <path d="M13.6 8.8v1.8m1.3-2.6v3.2m1.3-2.7v2.2" fill="none" stroke-width=".9"/>
-    <rect x="7.5" y="13" width="3.6" height="3" rx=".5" fill="none" stroke-width=".8"/>
-    <path d="m7.8 15.8 1.2-1.7 1.1 1 1-.4v1.1z" stroke="none"/>
-    <path d="M13.5 13h2l1 1v2.5h-3z" fill="none" stroke-width=".8"/>
-    <path d="M14.3 15.1h1.4" fill="none" stroke-width=".7"/>
-  </g>
+  <desc id="description">White conversion arrows surround red video, blue audio, green image and amber document symbols on a dark rounded tile.</desc>
+  <image width="24" height="24" xlink:href="data:image/png;base64,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"/>
 </svg>

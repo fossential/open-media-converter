@@ -29,7 +29,7 @@ import org.omc.ui.logging.LoggingConfiguration;
 public class MainApplicationJavaGi extends Application {
     private static final Logger logger = LoggerFactory.getLogger(MainApplicationJavaGi.class);
     private static final String VERSION = MainApplicationJavaGi.class.getPackage().getImplementationVersion() == null
-            ? "0.1.1" : MainApplicationJavaGi.class.getPackage().getImplementationVersion();
+            ? "0.1.2" : MainApplicationJavaGi.class.getPackage().getImplementationVersion();
 
     // Application components
     private MainWindowJavaGi mainWindow;

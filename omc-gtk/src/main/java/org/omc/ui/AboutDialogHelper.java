@@ -19,7 +19,7 @@ public class AboutDialogHelper {
     private static final String APPLICATION_NAME = "Open Media Converter";
     // Version from the jar manifest (set by Maven); falls back to the pom
     // version when absent, e.g. when running from unpacked classes.
-    private static final String FALLBACK_VERSION = "0.1.1";
+    private static final String FALLBACK_VERSION = "0.1.2";
     private static final String WEBSITE = "https://github.com/omc/open-media-converter";
     private static final String WEBSITE_LABEL = "GitHub Repository";
     private static final String COPYRIGHT = "Copyright © 2025 Open Media Converter Contributors";
@@ -72,7 +72,7 @@ public class AboutDialogHelper {
      * classes in tests or an IDE.
      * </p>
      *
-     * @return the implementation version, or {@code "0.1.1"} when unset
+     * @return the implementation version, or {@code "0.1.2"} when unset
      */
     static String resolveVersion() {
         String version = AboutDialogHelper.class.getPackage().getImplementationVersion();

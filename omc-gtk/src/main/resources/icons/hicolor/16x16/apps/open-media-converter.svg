@@ -1,17 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16" role="img" aria-labelledby="title description">
   <title id="title">Open Media Converter</title>
-  <desc id="description">Teal and blue conversion arrows surround four media tiles. Simplified for small icons.</desc>
-  <rect x="1" y="1" width="14" height="14" rx="3.5" fill="#1b3043"/>
-  <path d="M3 8a5 5 0 0 1 8.7-3.4" fill="none" stroke="#49d9c6" stroke-width="1.5" stroke-linecap="round"/>
-  <path d="m12.8 5.6-2.8-.5 2.2-2z" fill="#73f2d0"/>
-  <g transform="rotate(180 8 8)">
-    <path d="M3 8a5 5 0 0 1 8.7-3.4" fill="none" stroke="#67b9f1" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="m12.8 5.6-2.8-.5 2.2-2z" fill="#96d4ff"/>
-  </g>
-  <g fill="#f5fcff">
-    <path d="m5.5 5.5 2 1.2-2 1.2z"/>
-    <rect x="8.5" y="5.5" width="2" height="2" rx=".5"/>
-    <rect x="5.5" y="8.5" width="2" height="2" rx=".5"/>
-    <rect x="8.5" y="8.5" width="2" height="2" rx=".5"/>
-  </g>
+  <desc id="description">White conversion arrows surround red video, blue audio, green image and amber document symbols on a dark rounded tile.</desc>
+  <image width="16" height="16" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADk0lEQVQ4ywXBfUzUdRzA8ffn93AP3sGpaICgGVwq6EQFLJQkbatVq00t1krXzGb5sP5pa61Nt/qnlaWtB9u0h5lbzVpzLk0Iy3LqREMdqIMTZYHKgR7iwR33+P30ekm4eon0Xr2gtQ0r7XQ6PQvFGwz4NVwxm/v375HP5RHXy8DNQWwLMUYzPq+nv/30X7m5C+pEKqsWISIVRvkeqC8MBjFG6ew4xerVa0llMvxx6ioL54dJp5LksxlUzSXQDaj22MsaH5Xo0MgRY0yj3+ezL3d2esqnh9z1r25wN2163W1ubnYj3e1u//FjrmdKsZtxXNtk07OM6lLJJ7+TWeEFtUb1bDAQoLvznHz0yS6a173CZJ8X27IpKPCz72g3m7ruU936IanuLkxRiZKdENAGOxgqejgYmLSxp+s8u7/cIy+/sFbsX38Rq6mJmN8jB5MPypvRMt6qqyQbXimXr12S4FCP5L0BW/O5H60pkwvo6Yrw9JpmmuqX4mx+gxKvh6LtOyjc8T5b+n369uwgr00Zl4ZQKanHd6g3N4AxNnlFrcmFhUCc2uWNhH4/yvTfjpCrr8c0PSYGFEFqJiFXBgTujEMiLFK9RU28AzzTcBLDd6FoJolIL+7xv0kgsH0nY+3/8vEkhEOfcjr+Dpf7bW7eSsJdh6F4GT4HNOcTJ+ZJMzXm5dTIRZ3Yswg3t0BIjhJ/Zh77t2ShZTdPvniLjRUh8iMjuBM2B0/G2HmrmrqC6zg518LBMGhNyIn5xdqTTui71iox96LKB2PSUv4fT615DjyN0LkLer/QK4veg/ZjONkRLBPLYs3x4j04Rs+Zi3xlr5J1BU+wPFArlELNfCBZQGbUIp9bxnD0JeIl84SBi7hl1epggLwyYRk40Ccn/eeJWNf09nCU7d41QiytmA5J5JTU3RjxZdvk3IGfFSCRSoujquNkTS5fYWtxm5F/Mj9JtKaf1ufbWLGkSUcjVdy706sJEZJzVnGopU0PfP25VlbV6O3B6JgTmFp8ITEydIa0WaHljglFAla0tZ94XZxE1Tg3dQbZohkMDt7m8K7P+OHbveahuQutsfHEyWEt65DimWEULQfZCzwiHkvT2Sz+fI5tW7fyzb699PXdEECDoSIeKJnBWGLirGWxWY0OSPHMsDgeH6PRa/hDpdMA1/ba2rB4Mdd7I1oZniMiQklJKTf6+qT1xJn0tvXPxg7/2SHpTIr/AXB5qEu+D+lLAAAAAElFTkSuQmCC"/>
 </svg>

@@ -125,7 +125,7 @@ class AboutDialogHelperTest {
     @Test
     void resolveVersion_fallsBackToPomVersionWhenManifestMissing() {
         String fromManifest = AboutDialogHelper.class.getPackage().getImplementationVersion();
-        String expected = fromManifest != null ? fromManifest : "0.1.1";
+        String expected = fromManifest != null ? fromManifest : "0.1.2";
         assertEquals(expected, AboutDialogHelper.resolveVersion());
     }
 

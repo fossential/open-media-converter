@@ -71,6 +71,12 @@
     <mediatype>application/pdf</mediatype>
   </provides>
   <releases>
+    <release version="0.1.2" date="2026-10-28">
+      <description>
+        <p>Refreshed the application icon and logo with four colored media symbols and prominent conversion arrows.</p>
+        <p>Updated PNG and SVG icons across desktop and package sizes, with consistent regeneration from the master artwork.</p>
+      </description>
+    </release>
     <release version="0.1.1" date="2026-09-27">
       <description>
         <p>Fixed AppImage startup on Ubuntu 22.04 and compatible systems with a complete GTK dependency bundle and a modern AppImage runtime.</p>
