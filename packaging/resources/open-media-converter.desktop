@@ -3,10 +3,19 @@ Version=1.0
 Type=Application
 Name=Open Media Converter
 GenericName=Media Converter
+GenericName[fr]=Convertisseur multimédia
+GenericName[es]=Conversor multimedia
+GenericName[de]=Medienkonverter
+GenericName[pt]=Conversor multimédia
+GenericName[zh_CN]=媒体转换器
+GenericName[ja]=メディア変換
 Comment=Convert video, audio, image and document formats
 Comment[es]=Convierte formatos de video, audio, imagen y documentos
 Comment[fr]=Convertir des formats vidéo, audio, image et document
 Comment[de]=Video-, Audio-, Bild- und Dokumentformate konvertieren
+Comment[pt]=Converter formatos de vídeo, áudio, imagem e documentos
+Comment[zh_CN]=转换视频、音频、图像和文档格式
+Comment[ja]=動画・音声・画像・ドキュメントの形式を変換
 
 # Executable and icon
 Exec=/usr/bin/open-media-converter %F
@@ -33,6 +42,9 @@ Name=Convert Files
 Name[es]=Convertir archivos
 Name[fr]=Convertir des fichiers
 Name[de]=Dateien konvertieren
+Name[pt]=Converter ficheiros
+Name[zh_CN]=转换文件
+Name[ja]=ファイルを変換
 Exec=/usr/bin/open-media-converter
 
 [Desktop Action OpenSettings]
@@ -40,4 +52,7 @@ Name=Open Settings
 Name[es]=Abrir configuración
 Name[fr]=Ouvrir les paramètres
 Name[de]=Einstellungen öffnen
+Name[pt]=Abrir definições
+Name[zh_CN]=打开设置
+Name[ja]=設定を開く
 Exec=/usr/bin/open-media-converter --settings

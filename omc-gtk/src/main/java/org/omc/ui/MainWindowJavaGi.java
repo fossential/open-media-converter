@@ -183,6 +183,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
             }
 
             // Create builder and load from string
+            uiXml = I18n.translateUi(uiXml);
             builder = new GtkBuilder();
             builder.addFromString(uiXml, SettingsDialogJavaGi.uiByteLength(uiXml));
 
@@ -224,7 +225,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
             setDefaultSize(1000, 700);
 
             Box box = new Box(Orientation.VERTICAL, 0);
-            Label errorLabel = new Label("Failed to load UI. Please check logs.");
+            Label errorLabel = new Label(I18n.tr("Failed to load UI. Please check logs."));
             box.append(errorLabel);
             setChild(box);
         }
@@ -542,7 +543,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
 
             if (availablePresets.isEmpty()) {
                 // No presets available - show disabled message
-                MenuItem noPresetsItem = new MenuItem("No presets available", null);
+                MenuItem noPresetsItem = new MenuItem(I18n.tr("No presets available"), null);
                 noPresetsItem.setActionAndTarget(null, null);
                 presetSubmenu.appendItem(noPresetsItem);
             } else {
@@ -576,25 +577,25 @@ public class MainWindowJavaGi extends ApplicationWindow {
                     registeredPresetActionNames.add(actionName);
 
                     // Add menu item
-                    MenuItem presetItem = new MenuItem(preset.name(), "win." + actionName);
+                    MenuItem presetItem = new MenuItem(preset.builtIn() ? I18n.tr(preset.name()) : preset.name(), "win." + actionName);
                     presetSubmenu.appendItem(presetItem);
                 }
             }
         } catch (IllegalArgumentException e) {
             // Mixed selection or invalid selection - show error message
             logger.warn("Invalid selection for preset application: {}", e.getMessage());
-            MenuItem errorItem = new MenuItem("Cannot apply to mixed file types", null);
+            MenuItem errorItem = new MenuItem(I18n.tr("Cannot apply to mixed file types"), null);
             errorItem.setActionAndTarget(null, null);
             presetSubmenu.appendItem(errorItem);
         } catch (Exception e) {
             logger.error("Error building preset submenu", e);
-            MenuItem errorItem = new MenuItem("Error loading presets", null);
+            MenuItem errorItem = new MenuItem(I18n.tr("Error loading presets"), null);
             errorItem.setActionAndTarget(null, null);
             presetSubmenu.appendItem(errorItem);
         }
 
         // Add submenu to parent menu
-        menu.appendSubmenu("Apply Preset", presetSubmenu);
+        menu.appendSubmenu(I18n.tr("Apply Preset"), presetSubmenu);
     }
 
     /**
@@ -611,7 +612,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
     private void buildClearCustomSettingsMenuItem(Menu menu, List<String> selectedIds) {
         // Action is registered once in setupWindowActions and reads
         // contextMenuSelection; here only the menu model entry is built.
-        MenuItem clearItem = new MenuItem("Clear Custom Settings", "win.clear-preset");
+        MenuItem clearItem = new MenuItem(I18n.tr("Clear Custom Settings"), "win.clear-preset");
         menu.appendItem(clearItem);
     }
 
@@ -631,7 +632,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
         // Action is registered once in setupWindowActions (enabled state is
         // refreshed per popup in showContextMenu); here only the menu model
         // entry is built.
-        MenuItem openLocationItem = new MenuItem("Open File Location", "win.open-file-location");
+        MenuItem openLocationItem = new MenuItem(I18n.tr("Open File Location"), "win.open-file-location");
         menu.appendItem(openLocationItem);
     }
 
@@ -647,20 +648,21 @@ public class MainWindowJavaGi extends ApplicationWindow {
         try {
             controller.applyPresetToFiles(fileIds, preset);
             refreshFileList();
-            showStatus(String.format("Applied preset '%s' to %d file(s)", preset.name(), fileIds.size()));
+            showStatus(I18n.tr("Applied preset '%s' to %d file(s)",
+                    preset.builtIn() ? I18n.tr(preset.name()) : preset.name(), fileIds.size()));
             logger.info("Applied preset '{}' to {} file(s)", preset.name(), fileIds.size());
         } catch (IllegalArgumentException e) {
             logger.error("Failed to apply preset: {}", e.getMessage());
             // Defer error dialog to next idle cycle to ensure context menu dismisses first
             GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                showErrorDialog("Apply Preset Error", e.getMessage());
+                showErrorDialog(I18n.tr("Apply Preset Error"), e.getMessage());
                 return false;
             });
         } catch (Exception e) {
             logger.error("Unexpected error applying preset", e);
             // Defer error dialog to next idle cycle to ensure context menu dismisses first
             GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                showErrorDialog("Apply Preset Error", "An unexpected error occurred: " + e.getMessage());
+                showErrorDialog(I18n.tr("Apply Preset Error"), I18n.tr("An unexpected error occurred: ") + e.getMessage());
                 return false;
             });
         }
@@ -677,13 +679,13 @@ public class MainWindowJavaGi extends ApplicationWindow {
         try {
             controller.clearPresetFromFiles(fileIds);
             refreshFileList();
-            showStatus(String.format("Cleared custom settings from %d file(s)", fileIds.size()));
+            showStatus(I18n.tr("Cleared custom settings from %d file(s)", fileIds.size()));
             logger.info("Cleared custom settings from {} file(s)", fileIds.size());
         } catch (Exception e) {
             logger.error("Error clearing custom settings", e);
             // Defer error dialog to next idle cycle to ensure context menu dismisses first
             GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                showErrorDialog("Clear Settings Error", "Failed to clear custom settings: " + e.getMessage());
+                showErrorDialog(I18n.tr("Clear Settings Error"), I18n.tr("Failed to clear custom settings: ") + e.getMessage());
                 return false;
             });
         }
@@ -767,7 +769,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
 
     private void admitFiles(FileAdmission admission) {
         if (shutdownInProgress) return;
-        showStatus("Reading files…");
+        showStatus(I18n.tr("Reading files…"));
         fileAdmission.submit(() -> {
             int added = 0;
             boolean success = false;
@@ -780,14 +782,14 @@ public class MainWindowJavaGi extends ApplicationWindow {
                 failureMessage = e.getMessage();
             } catch (RuntimeException e) {
                 logger.error("Unexpected failure adding files", e);
-                failureMessage = "An unexpected error occurred while reading files: " + e.getMessage();
+                failureMessage = I18n.tr("An unexpected error occurred while reading files: ") + e.getMessage();
             }
             final int addedCount = added;
             final boolean succeeded = success;
             final String errorMessage = failureMessage;
             if (errorMessage != null) {
                 GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                    if (!shutdownInProgress) showErrorDialog("Add Files", errorMessage);
+                    if (!shutdownInProgress) showErrorDialog(I18n.tr("Add Files"), errorMessage);
                     return false;
                 });
             }
@@ -812,7 +814,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
      * @return the status message replacing the transient "Reading files…"
      */
     static String admissionStatusMessage(int addedCount, boolean success) {
-        return success ? addedCount + " file(s) added" : "Failed to add files";
+        return success ? I18n.tr("%d file(s) added", addedCount) : I18n.tr("Failed to add files");
     }
 
     /**
@@ -851,7 +853,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
                     logger.error("Failed to update settings in controller", e);
                     // Defer error dialog to next idle cycle to ensure settings dialog closes first
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                        showErrorDialog("Settings Error", "Failed to save settings: " + e.getMessage());
+                        showErrorDialog(I18n.tr("Settings Error"), I18n.tr("Failed to save settings: ") + e.getMessage());
                         return false;
                     });
                 }
@@ -862,7 +864,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
             logger.debug("Settings dialog displayed");
         } catch (Exception e) {
             logger.error("Failed to show settings dialog", e);
-            showErrorDialog("Settings Error", "Failed to open settings dialog: " + e.getMessage());
+            showErrorDialog(I18n.tr("Settings Error"), I18n.tr("Failed to open settings dialog: ") + e.getMessage());
         }
     }
 
@@ -880,8 +882,8 @@ public class MainWindowJavaGi extends ApplicationWindow {
         // Check if conversions are in progress
         if (controller.isConversionInProgress()) {
             showConfirmDialog(
-                    "Remove Files",
-                    "Conversions are in progress. Are you sure you want to remove selected files?",
+                    I18n.tr("Remove Files"),
+                    I18n.tr("Conversions are in progress. Are you sure you want to remove selected files?"),
                     confirmed -> {
                         if (confirmed) {
                             removeFiles(selectedFileIds);
@@ -890,8 +892,8 @@ public class MainWindowJavaGi extends ApplicationWindow {
         } else {
             // No conversion in progress, confirm removal
             showConfirmDialog(
-                    "Remove Files",
-                    "Remove " + selectedFileIds.size() + " selected file(s)?",
+                    I18n.tr("Remove Files"),
+                    I18n.tr("Remove %d selected file(s)?", selectedFileIds.size()),
                     confirmed -> {
                         if (confirmed) {
                             removeFiles(selectedFileIds);
@@ -909,10 +911,10 @@ public class MainWindowJavaGi extends ApplicationWindow {
         try {
             controller.handleRemoveFiles(fileIds);
             updateFileList();
-            showStatus(fileIds.size() + " file(s) removed");
+            showStatus(I18n.tr("%d file(s) removed", fileIds.size()));
         } catch (FileOperationException e) {
             logger.error("Failed to remove files", e);
-            showErrorDialog("Remove Files Error", e.getMessage());
+            showErrorDialog(I18n.tr("Remove Files Error"), e.getMessage());
         }
     }
 
@@ -962,15 +964,15 @@ public class MainWindowJavaGi extends ApplicationWindow {
             logger.error("Conversion start rejected: {}", e.getMessage());
             hideProgressView();
             updateFileList();
-            showErrorDialog("Conversion Error", e.getMessage());
-            showStatus("Conversion not started: " + e.getMessage());
+            showErrorDialog(I18n.tr("Conversion Error"), e.getMessage());
+            showStatus(I18n.tr("Conversion not started: ") + e.getMessage());
             return;
         }
 
         // Batch counters are initialized only after a successful start, so a
         // rejected start cannot disturb any (running or previous) batch state.
         logger.info("Starting conversion batch with {} files", batchState.totalFiles());
-        showStatus("Conversion Started");
+        showStatus(I18n.tr("Conversion Started"));
     }
 
     /**
@@ -981,10 +983,10 @@ public class MainWindowJavaGi extends ApplicationWindow {
         try {
             controller.handlePauseConversion();
             showResumeButton();
-            showStatus("Conversion Paused");
+            showStatus(I18n.tr("Conversion Paused"));
         } catch (RuntimeException failure) {
             logger.error("Could not pause conversion", failure);
-            showErrorDialog("Pause Error", failure.getMessage());
+            showErrorDialog(I18n.tr("Pause Error"), failure.getMessage());
         }
     }
 
@@ -996,10 +998,10 @@ public class MainWindowJavaGi extends ApplicationWindow {
         try {
             controller.handleResumeConversion();
             showPauseButton();
-            showStatus("Conversion Resumed");
+            showStatus(I18n.tr("Conversion Resumed"));
         } catch (RuntimeException failure) {
             logger.error("Could not resume conversion", failure);
-            showErrorDialog("Resume Error", failure.getMessage());
+            showErrorDialog(I18n.tr("Resume Error"), failure.getMessage());
         }
     }
 
@@ -1010,12 +1012,12 @@ public class MainWindowJavaGi extends ApplicationWindow {
     private void handleCancel() {
         logger.debug("Cancel button clicked");
         showConfirmDialog(
-                "Cancel Conversion",
-                "Are you sure you want to cancel all conversions?",
+                I18n.tr("Cancel Conversion"),
+                I18n.tr("Are you sure you want to cancel all conversions?"),
                 confirmed -> {
                     if (confirmed) {
                         controller.handleCancelConversion();
-                        showStatus("Conversions cancelled");
+                        showStatus(I18n.tr("Conversions cancelled"));
                     }
                 });
     }
@@ -1030,8 +1032,8 @@ public class MainWindowJavaGi extends ApplicationWindow {
     private boolean handleClose() {
         if (shutdownInProgress) return false;
         if (controller.isConversionInProgress()) {
-            showConfirmDialog("Close Application",
-                    "Conversions are in progress. Exit and cancel active conversions?",
+            showConfirmDialog(I18n.tr("Close Application"),
+                    I18n.tr("Conversions are in progress. Exit and cancel active conversions?"),
                     confirmed -> { if (confirmed) beginShutdown(); });
         } else {
             beginShutdown();
@@ -1121,7 +1123,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
 
             // Update file count and size labels
             long totalSize = files.stream().mapToLong(ConversionFile::size).sum();
-            fileCountLabel.setLabel(files.size() + " files selected");
+            fileCountLabel.setLabel(I18n.tr(files.size() == 1 ? "%d file selected" : "%d files selected", files.size()));
             totalSizeLabel.setLabel(formatBytes(totalSize));
 
             // Enable/disable Convert and Clear All buttons based on file list,
@@ -1267,18 +1269,18 @@ public class MainWindowJavaGi extends ApplicationWindow {
                     batchState.recordSuccess();
                     logger.info("Conversion completed successfully: {} ({}/{} files)",
                             fileId, batchState.completedFiles(), batchState.totalFiles());
-                    showStatus("Conversion completed: " + result.outputPath().map(Path::toString).orElse(""));
+                    showStatus(I18n.tr("Conversion completed: ") + result.outputPath().map(Path::toString).orElse(""));
                 } else if (result.isCancelled()) {
                     batchState.recordCancelled();
                     logger.info("Conversion cancelled: {} ({}/{} files)",
                             fileId, batchState.completedFiles(), batchState.totalFiles());
-                    showStatus("Conversion cancelled: " + fileId);
+                    showStatus(I18n.tr("Conversion cancelled: ") + fileId);
                 } else {
                     batchState.recordFailure();
                     logger.error("Conversion failed: {} - {} ({}/{} files)",
                             fileId, result.errorMessage().orElse("Unknown error"),
                             batchState.completedFiles(), batchState.totalFiles());
-                    showStatus("Conversion failed: " + result.errorMessage().orElse("Unknown error"));
+                    showStatus(I18n.tr("Conversion failed: ") + result.errorMessage().orElse(I18n.tr("Unknown error")));
                 }
 
                 // Note: Overall progress bar, speed, and time remaining are now updated
@@ -1549,37 +1551,37 @@ public class MainWindowJavaGi extends ApplicationWindow {
     static String composeBatchCompletionMessage(int totalFiles, int successful, int failed, int cancelled) {
         if (cancelled == totalFiles) {
             // All files were cancelled
-            return "All conversions cancelled";
+            return I18n.tr("All conversions cancelled");
         }
         int removed = totalFiles - successful - failed - cancelled;
         if (removed > 0) {
             // Some files were removed mid-conversion: report what actually
             // happened to each file instead of an all-successful claim.
-            StringBuilder sb = new StringBuilder(String.format("%d files processed:", totalFiles));
-            sb.append(String.format(" %d succeeded", successful));
+            StringBuilder sb = new StringBuilder(I18n.tr("%d files processed:", totalFiles));
+            sb.append(I18n.tr(" %d succeeded", successful));
             if (failed > 0) {
-                sb.append(String.format(", %d failed", failed));
+                sb.append(I18n.tr(", %d failed", failed));
             }
             if (cancelled > 0) {
-                sb.append(String.format(", %d cancelled", cancelled));
+                sb.append(I18n.tr(", %d cancelled", cancelled));
             }
-            sb.append(String.format(", %d removed during conversion", removed));
+            sb.append(I18n.tr(", %d removed during conversion", removed));
             return sb.toString();
         } else if (failed == 0 && cancelled == 0 && successful == totalFiles) {
-            return String.format("All %d files converted successfully!", totalFiles);
+            return I18n.tr("All %d files converted successfully!", totalFiles);
         } else if (successful == 0) {
-            return String.format("All %d files failed to convert.", totalFiles);
+            return I18n.tr("All %d files failed to convert.", totalFiles);
         } else {
             // Mixed results
-            StringBuilder sb = new StringBuilder("Conversion complete: ");
-            sb.append(String.format("%d successful", successful));
+            StringBuilder sb = new StringBuilder(I18n.tr("Conversion complete: "));
+            sb.append(I18n.tr("%d successful", successful));
             if (failed > 0) {
-                sb.append(String.format(", %d failed", failed));
+                sb.append(I18n.tr(", %d failed", failed));
             }
             if (cancelled > 0) {
-                sb.append(String.format(", %d cancelled", cancelled));
+                sb.append(I18n.tr(", %d cancelled", cancelled));
             }
-            sb.append(String.format(" out of %d files.", totalFiles));
+            sb.append(I18n.tr(" out of %d files.", totalFiles));
             return sb.toString();
         }
     }
@@ -1660,8 +1662,14 @@ public class MainWindowJavaGi extends ApplicationWindow {
     public void showAvailableCategories() {
         var categories = controller.getAvailableCategories();
         if (categories.size() < 4) {
-            showStatus(categories.isEmpty() ? "No conversion tools found. Install FFmpeg, ImageMagick, Pandoc or LibreOffice."
-                    : "Available conversions: " + categories.stream().map(Enum::name).sorted().collect(Collectors.joining(", ")));
+            showStatus(categories.isEmpty() ? I18n.tr("No conversion tools found. Install FFmpeg, ImageMagick, Pandoc or LibreOffice.")
+                    : I18n.tr("Available conversions: ") + categories.stream().map(category -> switch (category) {
+                        case VIDEO -> I18n.tr("Video");
+                        case AUDIO -> I18n.tr("Audio");
+                        case IMAGE -> I18n.tr("Image");
+                        case DOCUMENT -> I18n.tr("Document");
+                        default -> I18n.tr("Unknown");
+                    }).sorted().collect(Collectors.joining(", ")));
         }
     }
 
@@ -1743,15 +1751,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
      * @return formatted string (e.g., "1.5 MB")
      */
     private String formatBytes(long bytes) {
-        if (bytes < 1024) {
-            return bytes + " B";
-        } else if (bytes < 1024 * 1024) {
-            return String.format("%.1f KB", bytes / 1024.0);
-        } else if (bytes < 1024 * 1024 * 1024) {
-            return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
-        } else {
-            return String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0));
-        }
+        return I18n.bytes(bytes);
     }
 
     // ===== Dialog Helper Methods =====
@@ -1774,15 +1774,15 @@ public class MainWindowJavaGi extends ApplicationWindow {
                 org.gnome.gtk.FileChooserDialog dialog = new org.gnome.gtk.FileChooserDialog();
 
                 // Set properties after construction
-                dialog.setTitle("Select Files to Convert");
+                dialog.setTitle(I18n.tr("Select Files to Convert"));
                 dialog.setTransientFor(this);
                 dialog.setAction(org.gnome.gtk.FileChooserAction.OPEN);
                 dialog.setModal(true);
                 dialog.setSelectMultiple(true);
 
                 // Add buttons separately (safer than varargs constructor)
-                dialog.addButton("_Cancel", org.gnome.gtk.ResponseType.CANCEL.getValue());
-                dialog.addButton("_Open", org.gnome.gtk.ResponseType.ACCEPT.getValue());
+                dialog.addButton(I18n.tr("_Cancel"), org.gnome.gtk.ResponseType.CANCEL.getValue());
+                dialog.addButton(I18n.tr("_Open"), org.gnome.gtk.ResponseType.ACCEPT.getValue());
 
                 addFileFilters(dialog);
                 dialog.show();
@@ -1849,14 +1849,14 @@ public class MainWindowJavaGi extends ApplicationWindow {
                 org.gnome.gtk.FileChooserDialog dialog = new org.gnome.gtk.FileChooserDialog();
 
                 // Set properties after construction
-                dialog.setTitle("Select Output Folder");
+                dialog.setTitle(I18n.tr("Select Output Folder"));
                 dialog.setTransientFor(this);
                 dialog.setAction(org.gnome.gtk.FileChooserAction.SELECT_FOLDER);
                 dialog.setModal(true);
 
                 // Add buttons separately (safer than varargs constructor)
-                dialog.addButton("_Cancel", org.gnome.gtk.ResponseType.CANCEL.getValue());
-                dialog.addButton("_Select", org.gnome.gtk.ResponseType.ACCEPT.getValue());
+                dialog.addButton(I18n.tr("_Cancel"), org.gnome.gtk.ResponseType.CANCEL.getValue());
+                dialog.addButton(I18n.tr("_Select"), org.gnome.gtk.ResponseType.ACCEPT.getValue());
 
                 dialog.show();
 
@@ -1979,7 +1979,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
         Optional<ConversionFile> fileOptional = controller.getFile(fileId);
         if (fileOptional.isEmpty()) {
             logger.warn("File not found for ID: {}", fileId);
-            showErrorDialog("File Not Found", "Unable to find file details for the selected file.");
+            showErrorDialog(I18n.tr("File Not Found"), I18n.tr("Unable to find file details for the selected file."));
             return;
         }
 
@@ -2025,7 +2025,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
             Optional<ConversionFile> fileOptional = controller.getFile(fileId);
             if (fileOptional.isEmpty()) {
                 logger.warn("File not found for ID: {}", fileId);
-                showErrorDialog("File Not Found", "Unable to find the selected file.");
+                showErrorDialog(I18n.tr("File Not Found"), I18n.tr("Unable to find the selected file."));
                 return;
             }
 
@@ -2039,33 +2039,33 @@ public class MainWindowJavaGi extends ApplicationWindow {
             fileHandler.openInFileManager(pathToOpen);
 
             logger.info("Opened file location: {}", pathToOpen);
-            showStatus("Opened file location: " + pathToOpen.getParent().getFileName());
+            showStatus(I18n.tr("Opened file location: ") + pathToOpen.getParent().getFileName());
 
         } catch (java.nio.file.AccessDeniedException e) {
             // Task 68: Handle permission denied error
             logger.error("Permission denied accessing file location", e);
             showErrorDialog(
-                    "Permission Denied",
-                    "You do not have permission to access this location.\n\nPath: " + e.getFile());
+                    I18n.tr("Permission Denied"),
+                    I18n.tr("You do not have permission to access this location.\n\nPath: ") + e.getFile());
         } catch (java.io.FileNotFoundException e) {
             // Task 66: Handle file not found error
             logger.error("File not found when opening location", e);
             showErrorDialog(
-                    "File Not Found",
-                    "The file could not be found. It may have been moved or deleted.\n\n" + e.getMessage());
+                    I18n.tr("File Not Found"),
+                    I18n.tr("The file could not be found. It may have been moved or deleted.\n\n") + e.getMessage());
         } catch (java.io.IOException e) {
             // Task 67: Handle file manager not available error
             logger.error("Failed to open file manager", e);
             showErrorDialog(
-                    "Cannot Open File Manager",
-                    "Could not open the file manager. Please ensure xdg-open or a file manager " +
-                            "(Nautilus, Dolphin, Thunar, Nemo, PCManFM) is installed.\n\nError: " + e.getMessage());
+                    I18n.tr("Cannot Open File Manager"),
+                    I18n.tr("Could not open the file manager. Please ensure xdg-open or a file manager ") +
+                            I18n.tr("(Nautilus, Dolphin, Thunar, Nemo, PCManFM) is installed.\n\nError: ") + e.getMessage());
         } catch (Exception e) {
             // Catch-all for unexpected errors
             logger.error("Unexpected error opening file location", e);
             showErrorDialog(
-                    "Error",
-                    "An unexpected error occurred while trying to open the file location.\n\n" + e.getMessage());
+                    I18n.tr("Error"),
+                    I18n.tr("An unexpected error occurred while trying to open the file location.\n\n") + e.getMessage());
         }
     }
 
@@ -2122,7 +2122,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
                 pathToOpen = file.path();
             } else {
                 throw new java.io.FileNotFoundException(
-                        "File does not exist: " + pathToOpen);
+                        I18n.tr("File does not exist: ") + pathToOpen);
             }
         }
 
@@ -2139,7 +2139,7 @@ public class MainWindowJavaGi extends ApplicationWindow {
     private void addFileFilters(org.gnome.gtk.FileChooserDialog dialog) {
         // "All Supported Files" filter
         org.gnome.gtk.FileFilter allFilter = new org.gnome.gtk.FileFilter();
-        allFilter.setName("All Supported Files");
+        allFilter.setName(I18n.tr("All Supported Files"));
         for (FileFormat format : FileFormat.values()) {
             if (format != FileFormat.UNKNOWN && format.isValidInput()) {
                 for (String ext : format.getExtensions()) {
@@ -2150,14 +2150,14 @@ public class MainWindowJavaGi extends ApplicationWindow {
         dialog.addFilter(allFilter);
 
         // Category-specific filters
-        addCategoryFilter(dialog, FormatCategory.VIDEO, "Video Files");
-        addCategoryFilter(dialog, FormatCategory.AUDIO, "Audio Files");
-        addCategoryFilter(dialog, FormatCategory.IMAGE, "Image Files");
-        addCategoryFilter(dialog, FormatCategory.DOCUMENT, "Document Files");
+        addCategoryFilter(dialog, FormatCategory.VIDEO, I18n.tr("Video Files"));
+        addCategoryFilter(dialog, FormatCategory.AUDIO, I18n.tr("Audio Files"));
+        addCategoryFilter(dialog, FormatCategory.IMAGE, I18n.tr("Image Files"));
+        addCategoryFilter(dialog, FormatCategory.DOCUMENT, I18n.tr("Document Files"));
 
         // "All Files" filter
         org.gnome.gtk.FileFilter allFilesFilter = new org.gnome.gtk.FileFilter();
-        allFilesFilter.setName("All Files");
+        allFilesFilter.setName(I18n.tr("All Files"));
         allFilesFilter.addPattern("*");
         dialog.addFilter(allFilesFilter);
     }

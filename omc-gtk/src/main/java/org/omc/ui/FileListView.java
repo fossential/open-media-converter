@@ -10,7 +10,6 @@ import org.gnome.gtk.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,6 @@ import java.lang.foreign.MemorySegment;
 public class FileListView {
 
     private static final Logger logger = LoggerFactory.getLogger(FileListView.class);
-    private static final DecimalFormat SIZE_FORMAT = new DecimalFormat("#,##0.0");
 
     private final ColumnView columnView;
     private final StringList stringListModel;
@@ -730,11 +728,11 @@ public class FileListView {
             else bar.setFraction(file.progress() / 100.0);
         }
         if (label != null) {
-            String text = paused ? "Paused" : indeterminate ? "Converting..." : file.progress() + "%";
+            String text = paused ? I18n.tr("Paused") : indeterminate ? I18n.tr("Converting...") : I18n.tr("%d%%", file.progress());
             if (!paused && !indeterminate && file.progressInfo() != null
                     && !file.progressInfo().indeterminate() && !file.progressInfo().paused()
                     && (file.status() == ConversionStatus.IN_PROGRESS || file.status() == ConversionStatus.COMPLETED)) {
-                text += " at " + file.progressInfo().formatSpeed();
+                text = I18n.tr("%s at %s", text, I18n.speed(file.progressInfo().bytesPerSecond()));
             }
             label.setLabel(text);
         }
@@ -756,15 +754,7 @@ public class FileListView {
      * @return formatted size string (e.g., "1.5 MB")
      */
     private String formatFileSize(long bytes) {
-        if (bytes < 1024) {
-            return bytes + " B";
-        } else if (bytes < 1024 * 1024) {
-            return SIZE_FORMAT.format(bytes / 1024.0) + " KB";
-        } else if (bytes < 1024 * 1024 * 1024) {
-            return SIZE_FORMAT.format(bytes / (1024.0 * 1024.0)) + " MB";
-        } else {
-            return SIZE_FORMAT.format(bytes / (1024.0 * 1024.0 * 1024.0)) + " GB";
-        }
+        return I18n.bytes(bytes);
     }
 
     /**
@@ -775,11 +765,11 @@ public class FileListView {
      */
     private String formatStatus(ConversionStatus status) {
         return switch (status) {
-            case PENDING -> "Pending";
-            case IN_PROGRESS -> "Converting...";
-            case COMPLETED -> "Completed";
-            case FAILED -> "Failed";
-            case CANCELLED -> "Cancelled";
+            case PENDING -> I18n.tr("Pending");
+            case IN_PROGRESS -> I18n.tr("Converting...");
+            case COMPLETED -> I18n.tr("Completed");
+            case FAILED -> I18n.tr("Failed");
+            case CANCELLED -> I18n.tr("Cancelled");
         };
     }
 
@@ -811,7 +801,7 @@ public class FileListView {
             org.omc.model.ConversionSettings resolver =
                     cachedSettings != null ? cachedSettings : EMPTY_SETTINGS;
             org.omc.model.FileFormat format = resolver.resolveOutputFormat(file);
-            return format != null ? format.name() : "Not Set";
+            return format != null ? format.name() : I18n.tr("Not Set");
         }
 
         // Use global settings for file category
@@ -853,15 +843,15 @@ public class FileListView {
      */
     private String resolveFormatFromGlobalSettings(org.omc.model.ConversionFile file) {
         if (cachedSettings == null) {
-            return "Not Set";
+            return I18n.tr("Not Set");
         }
         try {
             org.omc.model.FileFormat outputFormat =
                     cachedSettings.resolveOutputFormat(file.format().getCategory());
-            return outputFormat != null ? outputFormat.name() : "Not Set";
+            return outputFormat != null ? outputFormat.name() : I18n.tr("Not Set");
         } catch (RuntimeException e) {
             logger.warn("Failed to resolve output format from global settings", e);
-            return "Not Set";
+            return I18n.tr("Not Set");
         }
     }
 
@@ -1394,8 +1384,8 @@ public class FileListView {
             String format2 = resolveOutputFormat(file2);
 
             // Handle special cases: "Not Set" and "Unknown" sort to end
-            boolean isSpecial1 = format1.equals("Not Set") || format1.equals("Unknown");
-            boolean isSpecial2 = format2.equals("Not Set") || format2.equals("Unknown");
+            boolean isSpecial1 = format1.equals(I18n.tr("Not Set")) || format1.equals(I18n.tr("Unknown"));
+            boolean isSpecial2 = format2.equals(I18n.tr("Not Set")) || format2.equals(I18n.tr("Unknown"));
 
             if (isSpecial1 && !isSpecial2)
                 return 1; // format1 sorts after format2

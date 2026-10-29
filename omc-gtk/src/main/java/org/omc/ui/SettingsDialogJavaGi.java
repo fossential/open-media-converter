@@ -114,11 +114,11 @@ public class SettingsDialogJavaGi {
      */
     static String[] videoResolutionDropdownLabels() {
         String[] labels = new String[VIDEO_RESOLUTION_OPTIONS.length + 2];
-        labels[0] = "Original";
+        labels[0] = I18n.tr("Original");
         for (int i = 0; i < VIDEO_RESOLUTION_OPTIONS.length; i++) {
             labels[i + 1] = VIDEO_RESOLUTION_OPTIONS[i].label();
         }
-        labels[labels.length - 1] = "Custom";
+        labels[labels.length - 1] = I18n.tr("Custom");
         return labels;
     }
 
@@ -164,9 +164,9 @@ public class SettingsDialogJavaGi {
      */
     static String[] videoFrameRateDropdownLabels() {
         String[] labels = new String[VIDEO_FRAME_RATE_OPTIONS.length + 1];
-        labels[0] = "Original";
+        labels[0] = I18n.tr("Original");
         for (int i = 0; i < VIDEO_FRAME_RATE_OPTIONS.length; i++) {
-            labels[i + 1] = VIDEO_FRAME_RATE_OPTIONS[i] + " fps";
+            labels[i + 1] = VIDEO_FRAME_RATE_OPTIONS[i] + I18n.tr(" fps");
         }
         return labels;
     }
@@ -228,7 +228,7 @@ public class SettingsDialogJavaGi {
             var page = notebook.getNthPage(i + 1);
             boolean enabled = available.contains(categories[i]);
             page.setSensitive(enabled);
-            notebook.getTabLabel(page).setTooltipText(enabled ? null : "Install the conversion tool for this section.");
+            notebook.getTabLabel(page).setTooltipText(enabled ? null : I18n.tr("Install the conversion tool for this section."));
         }
     }
 
@@ -252,14 +252,14 @@ public class SettingsDialogJavaGi {
         boolean toc = java.util.Set.of(FileFormat.PDF, FileFormat.HTML, FileFormat.DOCX, FileFormat.EPUB,
                 FileFormat.TEX, FileFormat.LATEX).contains(format);
         embedFontsCheckbox.setSensitive(format == FileFormat.PDF);
-        embedFontsCheckbox.setTooltipText("Embed standard fonts in PDF output. Other formats use their own font handling.");
+        embedFontsCheckbox.setTooltipText(I18n.tr("Embed standard fonts in PDF output. Other formats use their own font handling."));
         if (format != FileFormat.PDF) embedFontsCheckbox.setActive(false);
         generateTocCheckbox.setSensitive(toc);
-        generateTocCheckbox.setTooltipText("Generate contents from headings in text documents supported by Pandoc.");
+        generateTocCheckbox.setTooltipText(I18n.tr("Generate contents from headings in text documents supported by Pandoc."));
         if (!toc) generateTocCheckbox.setActive(false);
         for (var spin : java.util.List.of(marginTopSpinButton, marginBottomSpinButton, marginLeftSpinButton, marginRightSpinButton)) {
             spin.setSensitive(margins);
-            spin.setTooltipText("Page margins for text documents. Native spreadsheet and presentation conversions retain their source layout.");
+            spin.setTooltipText(I18n.tr("Page margins for text documents. Native spreadsheet and presentation conversions retain their source layout."));
             if (!margins) spin.setValue(25);
         }
         templateFileEntry.setSensitive(text);
@@ -334,6 +334,7 @@ public class SettingsDialogJavaGi {
     private CheckButton createSubdirectoryCheckbox;
     private CheckButton deleteOriginalFileCheckbox;
     private SpinButton parallelConversionsSpinButton;
+    private DropDown languageDropdown;
 
     // Video Tab Widgets
     private DropDown videoFormatDropdown;
@@ -528,6 +529,7 @@ public class SettingsDialogJavaGi {
             }
 
             // Create builder and load from string
+            uiContent = I18n.translateUi(uiContent);
             builder = GtkBuilder.fromString(uiContent, uiByteLength(uiContent));
 
             // Get the dialog from builder - use it directly instead of trying to reparent
@@ -565,6 +567,8 @@ public class SettingsDialogJavaGi {
         createSubdirectoryCheckbox = (CheckButton) builder.getObject("createSubdirectoryCheckbox");
         deleteOriginalFileCheckbox = (CheckButton) builder.getObject("deleteOriginalFileCheckbox");
         parallelConversionsSpinButton = (SpinButton) builder.getObject("parallelConversionsSpinButton");
+        languageDropdown = (DropDown) builder.getObject("languageDropdown");
+        languageDropdown.setModel(new org.gnome.gtk.StringList(I18n.languageNames()));
 
         // Video tab widgets
         videoFormatDropdown = (DropDown) builder.getObject("videoFormatDropdown");
@@ -606,8 +610,8 @@ public class SettingsDialogJavaGi {
         imageFormatDropdown = (DropDown) builder.getObject("imageFormatDropdown");
         imageQualityScale = (Scale) builder.getObject("imageQualityScale");
         imageQualityScale.setRange(ImageSettings.LOSSLESS_QUALITY, 100);
-        imageQualityScale.setFormatValueFunc((scale, value) -> value < 0 ? "Lossless"
-                : value == 0 ? "Default" : Integer.toString((int) value));
+        imageQualityScale.setFormatValueFunc(new GtkScaleFormatter(value -> value < 0 ? I18n.tr("Lossless")
+                : value == 0 ? I18n.tr("Default") : Integer.toString((int) value)));
         imageWidthSpinButton = (SpinButton) builder.getObject("imageWidthSpinButton");
         imageHeightSpinButton = (SpinButton) builder.getObject("imageHeightSpinButton");
         maintainAspectRatioCheckbox = (CheckButton) builder.getObject("maintainAspectRatioCheckbox");
@@ -778,6 +782,7 @@ public class SettingsDialogJavaGi {
         // Settings-bearing DropDowns: track selection changes via the
         // "selected" notify signal. Programmatic setSelected() during
         // setSettings() is covered by that method's trailing flag reset.
+        trackDropDownChanges(languageDropdown);
         trackDropDownChanges(videoFormatDropdown);
         trackDropDownChanges(videoCodecDropdown);
         trackDropDownChanges(videoAspectRatioDropdown);
@@ -897,13 +902,13 @@ public class SettingsDialogJavaGi {
                     .setTransientFor(dialog)
                     .setModal(true)
                     .setMessageType(MessageType.QUESTION)
-                    .setText("Unsaved Changes")
-                    .setSecondaryText("You have unsaved changes. Discard them?")
+                    .setText(I18n.tr("Unsaved Changes"))
+                    .setSecondaryText(I18n.tr("You have unsaved changes. Discard them?"))
                     .build();
 
             // Add buttons manually
-            confirmDialog.addButton("Cancel", ResponseType.CANCEL.getValue());
-            confirmDialog.addButton("Discard", ResponseType.YES.getValue());
+            confirmDialog.addButton(I18n.tr("Cancel"), ResponseType.CANCEL.getValue());
+            confirmDialog.addButton(I18n.tr("Discard"), ResponseType.YES.getValue());
 
             confirmDialog.onResponse((response) -> {
                 if (response == ResponseType.YES.getValue()) {
@@ -941,7 +946,7 @@ public class SettingsDialogJavaGi {
         ConversionSettings newSettings = getConversionSettings();
 
         if (newSettings == null) {
-            showValidationError("Failed to read settings from dialog. Please try again.");
+            showValidationError(I18n.tr("Failed to read settings from dialog. Please try again."));
             return;
         }
 
@@ -977,7 +982,7 @@ public class SettingsDialogJavaGi {
 
         // Create file chooser dialog
         FileChooserNative fileChooser = FileChooserNative.builder()
-                .setTitle("Select Output Directory")
+                .setTitle(I18n.tr("Select Output Directory"))
                 .setAction(FileChooserAction.SELECT_FOLDER)
                 .setTransientFor(dialog)
                 .build();
@@ -1023,7 +1028,7 @@ public class SettingsDialogJavaGi {
 
         // Create file chooser dialog
         FileChooserNative fileChooser = FileChooserNative.builder()
-                .setTitle("Select Template File")
+                .setTitle(I18n.tr("Select Template File"))
                 .setAction(FileChooserAction.OPEN)
                 .setTransientFor(dialog)
                 .build();
@@ -1096,10 +1101,10 @@ public class SettingsDialogJavaGi {
         try {
             // Use cached presets for performance (REQ-5.2)
             String[] presetNames = new String[presets.size() + 1];
-            presetNames[0] = "-- Select Preset --";
+            presetNames[0] = I18n.tr("-- Select Preset --");
 
             for (int i = 0; i < presets.size(); i++) {
-                presetNames[i + 1] = presets.get(i).name();
+                presetNames[i + 1] = presets.get(i).builtIn() ? I18n.tr(presets.get(i).name()) : presets.get(i).name();
             }
 
             // Set model based on combo type
@@ -1194,7 +1199,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to load selected video preset", e);
-            showError("Failed to load preset: " + e.getMessage());
+            showError(I18n.tr("Failed to load preset: ") + e.getMessage());
         }
     }
 
@@ -1209,12 +1214,12 @@ public class SettingsDialogJavaGi {
 
         logger.debug("Save video preset button clicked");
 
-        showPresetNameDialog("Save Video Preset", name -> {
+        showPresetNameDialog(I18n.tr("Save Video Preset"), name -> {
             try {
                 // Read current video settings from UI
                 VideoSettings videoSettings = readVideoSettings();
                 if (videoSettings == null) {
-                    showError("Failed to read video settings");
+                    showError(I18n.tr("Failed to read video settings"));
                     return;
                 }
 
@@ -1236,7 +1241,7 @@ public class SettingsDialogJavaGi {
                 populateVideoPresets();
 
                 // Show success message
-                showInfo("Video preset '" + name + "' saved successfully");
+                showInfo(I18n.tr("Video preset '%s' saved successfully", name));
 
                 logger.info("Saved video preset: {}", name);
 
@@ -1244,7 +1249,7 @@ public class SettingsDialogJavaGi {
                 showError(e.getMessage());
             } catch (IOException e) {
                 logger.error("Failed to save video preset", e);
-                showError("Failed to save preset: " + e.getMessage());
+                showError(I18n.tr("Failed to save preset: ") + e.getMessage());
             }
         });
     }
@@ -1286,7 +1291,7 @@ public class SettingsDialogJavaGi {
 
             // Show confirmation dialog
             Window confirmDialog = new Window();
-            confirmDialog.setTitle("Delete Preset");
+            confirmDialog.setTitle(I18n.tr("Delete Preset"));
             confirmDialog.setModal(true);
             confirmDialog.setTransientFor(dialog);
             confirmDialog.setDefaultSize(400, -1);
@@ -1302,7 +1307,7 @@ public class SettingsDialogJavaGi {
             content.setMarginStart(12);
             content.setMarginEnd(12);
 
-            Label label = new Label("Delete preset '" + presetName + "'?");
+            Label label = new Label(I18n.tr("Delete preset '%s'?", presetName));
             content.append(label);
 
             mainBox.append(content);
@@ -1315,11 +1320,11 @@ public class SettingsDialogJavaGi {
             buttonBox.setMarginEnd(12);
             buttonBox.setHalign(Align.END);
 
-            Button cancelButton = Button.withLabel("Cancel");
+            Button cancelButton = Button.withLabel(I18n.tr("Cancel"));
             cancelButton.onClicked(() -> confirmDialog.close());
             buttonBox.append(cancelButton);
 
-            Button deleteButton = Button.withLabel("Delete");
+            Button deleteButton = Button.withLabel(I18n.tr("Delete"));
             deleteButton.addCssClass("destructive-action");
             deleteButton.onClicked(() -> {
                 try {
@@ -1333,14 +1338,14 @@ public class SettingsDialogJavaGi {
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
                         refreshPresetCache(); // Refresh cache after delete (REQ-5.2)
                         populateVideoPresets();
-                        showInfo("Preset deleted successfully");
+                        showInfo(I18n.tr("Preset deleted successfully"));
                         return false;
                     });
                 } catch (Exception e) {
                     logger.error("Failed to delete preset", e);
                     confirmDialog.close();
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                        showError("Failed to delete preset: " + e.getMessage());
+                        showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
                         return false;
                     });
                 }
@@ -1354,7 +1359,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to delete preset", e);
-            showError("Failed to delete preset: " + e.getMessage());
+            showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
         }
     }
 
@@ -1423,7 +1428,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to load audio preset", e);
-            showError("Failed to load preset: " + e.getMessage());
+            showError(I18n.tr("Failed to load preset: ") + e.getMessage());
         }
     }
 
@@ -1437,13 +1442,13 @@ public class SettingsDialogJavaGi {
 
         logger.debug("Save audio preset button clicked");
 
-        showPresetNameDialog("Save Audio Preset", presetName -> {
+        showPresetNameDialog(I18n.tr("Save Audio Preset"), presetName -> {
             try {
                 // Read current audio settings from UI (live widgets, not the
                 // dialog-open snapshot)
                 AudioSettings settings = readAudioSettings();
                 if (settings == null) {
-                    showError("Failed to read audio settings");
+                    showError(I18n.tr("Failed to read audio settings"));
                     return;
                 }
 
@@ -1454,12 +1459,12 @@ public class SettingsDialogJavaGi {
                 settingsManager.addSectionPreset(preset);
                 refreshPresetCache(); // Refresh cache after save (REQ-5.2)
                 populateAudioPresets();
-                showInfo("Preset saved successfully");
+                showInfo(I18n.tr("Preset saved successfully"));
                 logger.info("Saved audio preset: {}", presetName);
 
             } catch (IOException e) {
                 logger.error("Failed to save preset", e);
-                showError("Failed to save preset: " + e.getMessage());
+                showError(I18n.tr("Failed to save preset: ") + e.getMessage());
             }
         });
     }
@@ -1496,7 +1501,7 @@ public class SettingsDialogJavaGi {
 
             // Show confirmation dialog
             Window confirmDialog = new Window();
-            confirmDialog.setTitle("Delete Preset");
+            confirmDialog.setTitle(I18n.tr("Delete Preset"));
             confirmDialog.setModal(true);
             confirmDialog.setTransientFor(dialog);
             confirmDialog.setDefaultSize(400, -1);
@@ -1512,7 +1517,7 @@ public class SettingsDialogJavaGi {
             content.setMarginStart(12);
             content.setMarginEnd(12);
 
-            Label label = new Label("Delete preset '" + presetName + "'?");
+            Label label = new Label(I18n.tr("Delete preset '%s'?", presetName));
             content.append(label);
 
             mainBox.append(content);
@@ -1525,11 +1530,11 @@ public class SettingsDialogJavaGi {
             buttonBox.setMarginEnd(12);
             buttonBox.setHalign(Align.END);
 
-            Button cancelButton = Button.withLabel("Cancel");
+            Button cancelButton = Button.withLabel(I18n.tr("Cancel"));
             cancelButton.onClicked(() -> confirmDialog.close());
             buttonBox.append(cancelButton);
 
-            Button deleteButton = Button.withLabel("Delete");
+            Button deleteButton = Button.withLabel(I18n.tr("Delete"));
             deleteButton.addCssClass("destructive-action");
             deleteButton.onClicked(() -> {
                 try {
@@ -1543,14 +1548,14 @@ public class SettingsDialogJavaGi {
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
                         refreshPresetCache(); // REQ-5.2: Refresh cache after modification
                         populateAudioPresets();
-                        showInfo("Preset deleted successfully");
+                        showInfo(I18n.tr("Preset deleted successfully"));
                         return false;
                     });
                 } catch (Exception e) {
                     logger.error("Failed to delete preset", e);
                     confirmDialog.close();
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                        showError("Failed to delete preset: " + e.getMessage());
+                        showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
                         return false;
                     });
                 }
@@ -1564,7 +1569,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to delete preset", e);
-            showError("Failed to delete preset: " + e.getMessage());
+            showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
         }
     }
 
@@ -1629,7 +1634,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to load image preset", e);
-            showError("Failed to load preset: " + e.getMessage());
+            showError(I18n.tr("Failed to load preset: ") + e.getMessage());
         }
     }
 
@@ -1643,13 +1648,13 @@ public class SettingsDialogJavaGi {
 
         logger.debug("Save image preset button clicked");
 
-        showPresetNameDialog("Save Image Preset", presetName -> {
+        showPresetNameDialog(I18n.tr("Save Image Preset"), presetName -> {
             try {
                 // Read current image settings from UI (live widgets, not the
                 // dialog-open snapshot)
                 ImageSettings settings = readImageSettings();
                 if (settings == null) {
-                    showError("Failed to read image settings");
+                    showError(I18n.tr("Failed to read image settings"));
                     return;
                 }
 
@@ -1660,12 +1665,12 @@ public class SettingsDialogJavaGi {
                 settingsManager.addSectionPreset(preset);
                 refreshPresetCache(); // REQ-5.2: Refresh cache after modification
                 populateImagePresets();
-                showInfo("Preset saved successfully");
+                showInfo(I18n.tr("Preset saved successfully"));
                 logger.info("Saved image preset: {}", presetName);
 
             } catch (IOException e) {
                 logger.error("Failed to save preset", e);
-                showError("Failed to save preset: " + e.getMessage());
+                showError(I18n.tr("Failed to save preset: ") + e.getMessage());
             }
         });
     }
@@ -1702,7 +1707,7 @@ public class SettingsDialogJavaGi {
 
             // Show confirmation dialog
             Window confirmDialog = new Window();
-            confirmDialog.setTitle("Delete Preset");
+            confirmDialog.setTitle(I18n.tr("Delete Preset"));
             confirmDialog.setModal(true);
             confirmDialog.setTransientFor(dialog);
             confirmDialog.setDefaultSize(400, -1);
@@ -1718,7 +1723,7 @@ public class SettingsDialogJavaGi {
             content.setMarginStart(12);
             content.setMarginEnd(12);
 
-            Label label = new Label("Delete preset '" + presetName + "'?");
+            Label label = new Label(I18n.tr("Delete preset '%s'?", presetName));
             content.append(label);
 
             mainBox.append(content);
@@ -1731,11 +1736,11 @@ public class SettingsDialogJavaGi {
             buttonBox.setMarginEnd(12);
             buttonBox.setHalign(Align.END);
 
-            Button cancelButton = Button.withLabel("Cancel");
+            Button cancelButton = Button.withLabel(I18n.tr("Cancel"));
             cancelButton.onClicked(() -> confirmDialog.close());
             buttonBox.append(cancelButton);
 
-            Button deleteButton = Button.withLabel("Delete");
+            Button deleteButton = Button.withLabel(I18n.tr("Delete"));
             deleteButton.addCssClass("destructive-action");
             deleteButton.onClicked(() -> {
                 try {
@@ -1749,14 +1754,14 @@ public class SettingsDialogJavaGi {
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
                         refreshPresetCache(); // REQ-5.2: Refresh cache after modification
                         populateImagePresets();
-                        showInfo("Preset deleted successfully");
+                        showInfo(I18n.tr("Preset deleted successfully"));
                         return false;
                     });
                 } catch (Exception e) {
                     logger.error("Failed to delete preset", e);
                     confirmDialog.close();
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                        showError("Failed to delete preset: " + e.getMessage());
+                        showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
                         return false;
                     });
                 }
@@ -1770,7 +1775,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to delete preset", e);
-            showError("Failed to delete preset: " + e.getMessage());
+            showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
         }
     }
 
@@ -1835,7 +1840,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to load document preset", e);
-            showError("Failed to load preset: " + e.getMessage());
+            showError(I18n.tr("Failed to load preset: ") + e.getMessage());
         }
     }
 
@@ -1849,13 +1854,13 @@ public class SettingsDialogJavaGi {
 
         logger.debug("Save document preset button clicked");
 
-        showPresetNameDialog("Save Document Preset", presetName -> {
+        showPresetNameDialog(I18n.tr("Save Document Preset"), presetName -> {
             try {
                 // Read current document settings from UI (live widgets, not
                 // the dialog-open snapshot)
                 DocumentSettings settings = readDocumentSettings();
                 if (settings == null) {
-                    showError("Failed to read document settings");
+                    showError(I18n.tr("Failed to read document settings"));
                     return;
                 }
 
@@ -1866,12 +1871,12 @@ public class SettingsDialogJavaGi {
                 settingsManager.addSectionPreset(preset);
                 refreshPresetCache(); // REQ-5.2: Refresh cache after modification
                 populateDocPresets();
-                showInfo("Preset saved successfully");
+                showInfo(I18n.tr("Preset saved successfully"));
                 logger.info("Saved document preset: {}", presetName);
 
             } catch (IOException e) {
                 logger.error("Failed to save preset", e);
-                showError("Failed to save preset: " + e.getMessage());
+                showError(I18n.tr("Failed to save preset: ") + e.getMessage());
             }
         });
     }
@@ -1908,7 +1913,7 @@ public class SettingsDialogJavaGi {
 
             // Show confirmation dialog
             Window confirmDialog = new Window();
-            confirmDialog.setTitle("Delete Preset");
+            confirmDialog.setTitle(I18n.tr("Delete Preset"));
             confirmDialog.setModal(true);
             confirmDialog.setTransientFor(dialog);
             confirmDialog.setDefaultSize(400, -1);
@@ -1924,7 +1929,7 @@ public class SettingsDialogJavaGi {
             content.setMarginStart(12);
             content.setMarginEnd(12);
 
-            Label label = new Label("Delete preset '" + presetName + "'?");
+            Label label = new Label(I18n.tr("Delete preset '%s'?", presetName));
             content.append(label);
 
             mainBox.append(content);
@@ -1937,11 +1942,11 @@ public class SettingsDialogJavaGi {
             buttonBox.setMarginEnd(12);
             buttonBox.setHalign(Align.END);
 
-            Button cancelButton = Button.withLabel("Cancel");
+            Button cancelButton = Button.withLabel(I18n.tr("Cancel"));
             cancelButton.onClicked(() -> confirmDialog.close());
             buttonBox.append(cancelButton);
 
-            Button deleteButton = Button.withLabel("Delete");
+            Button deleteButton = Button.withLabel(I18n.tr("Delete"));
             deleteButton.addCssClass("destructive-action");
             deleteButton.onClicked(() -> {
                 try {
@@ -1955,14 +1960,14 @@ public class SettingsDialogJavaGi {
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
                         refreshPresetCache(); // REQ-5.2: Refresh cache after modification
                         populateDocPresets();
-                        showInfo("Preset deleted successfully");
+                        showInfo(I18n.tr("Preset deleted successfully"));
                         return false;
                     });
                 } catch (Exception e) {
                     logger.error("Failed to delete preset", e);
                     confirmDialog.close();
                     GLib.idleAdd(GLib.PRIORITY_DEFAULT_IDLE, () -> {
-                        showError("Failed to delete preset: " + e.getMessage());
+                        showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
                         return false;
                     });
                 }
@@ -1976,7 +1981,7 @@ public class SettingsDialogJavaGi {
 
         } catch (IllegalStateException e) {
             logger.error("Failed to delete preset", e);
-            showError("Failed to delete preset: " + e.getMessage());
+            showError(I18n.tr("Failed to delete preset: ") + e.getMessage());
         }
     }
 
@@ -1990,11 +1995,11 @@ public class SettingsDialogJavaGi {
                 .setTransientFor(dialog)
                 .setModal(true)
                 .setMessageType(MessageType.ERROR)
-                .setText("Error")
+                .setText(I18n.tr("Error"))
                 .setSecondaryText(message)
                 .build();
 
-        errorDialog.addButton("OK", ResponseType.OK.getValue());
+        errorDialog.addButton(I18n.tr("OK"), ResponseType.OK.getValue());
         errorDialog.onResponse((response) -> {
             errorDialog.destroy();
         });
@@ -2011,11 +2016,11 @@ public class SettingsDialogJavaGi {
                 .setTransientFor(dialog)
                 .setModal(true)
                 .setMessageType(MessageType.INFO)
-                .setText("Success")
+                .setText(I18n.tr("Success"))
                 .setSecondaryText(message)
                 .build();
 
-        infoDialog.addButton("OK", ResponseType.OK.getValue());
+        infoDialog.addButton(I18n.tr("OK"), ResponseType.OK.getValue());
         infoDialog.onResponse((response) -> {
             infoDialog.destroy();
         });
@@ -2047,12 +2052,12 @@ public class SettingsDialogJavaGi {
         content.setMarginStart(12);
         content.setMarginEnd(12);
 
-        Label label = new Label("Preset name:");
+        Label label = new Label(I18n.tr("Preset name:"));
         label.setHalign(Align.START);
         content.append(label);
 
         Entry nameEntry = new Entry();
-        nameEntry.setPlaceholderText("Enter preset name...");
+        nameEntry.setPlaceholderText(I18n.tr("Enter preset name..."));
         content.append(nameEntry);
 
         // Validation error label (initially hidden)
@@ -2073,12 +2078,12 @@ public class SettingsDialogJavaGi {
         buttonBar.setHalign(Align.END);
 
         Button cancelButton = new Button();
-        cancelButton.setLabel("Cancel");
+        cancelButton.setLabel(I18n.tr("Cancel"));
         cancelButton.onClicked(() -> nameDialog.close());
         buttonBar.append(cancelButton);
 
         Button saveButton = new Button();
-        saveButton.setLabel("Save");
+        saveButton.setLabel(I18n.tr("Save"));
         saveButton.addCssClass("suggested-action");
         buttonBar.append(saveButton);
 
@@ -2110,7 +2115,7 @@ public class SettingsDialogJavaGi {
                     nameDialog.close();
                 } catch (Exception e) {
                     logger.error("Failed to save preset", e);
-                    showError("Failed to save preset: " + e.getMessage());
+                    showError(I18n.tr("Failed to save preset: ") + e.getMessage());
                 }
             }
         });
@@ -2127,7 +2132,7 @@ public class SettingsDialogJavaGi {
                         nameDialog.close();
                     } catch (Exception e) {
                         logger.error("Failed to save preset", e);
-                        showError("Failed to save preset: " + e.getMessage());
+                        showError(I18n.tr("Failed to save preset: ") + e.getMessage());
                     }
                 }
             }
@@ -2323,6 +2328,11 @@ public class SettingsDialogJavaGi {
      */
     private void populateOutputSettings(ConversionSettings settings) {
         logger.debug("Populating general tab settings");
+
+        String languageTag = settings.language().replace('_', '-');
+        int languageIndex = I18n.LANGUAGE_TAGS.indexOf(
+                "system".equalsIgnoreCase(languageTag) ? "system" : java.util.Locale.forLanguageTag(languageTag).getLanguage());
+        languageDropdown.setSelected(Math.max(0, languageIndex));
 
         // Set output directory
         if (outputDirectoryEntry != null && settings.outputDirectory() != null) {
@@ -2524,9 +2534,6 @@ public class SettingsDialogJavaGi {
 
         // Set preset
         if (videoPresetDropdown != null && videoSettings.preset() != null) {
-            org.gnome.gtk.StringList presetList = new org.gnome.gtk.StringList(VIDEO_PRESETS);
-            videoPresetDropdown.setModel(presetList);
-
             for (int i = 0; i < VIDEO_PRESETS.length; i++) {
                 if (VIDEO_PRESETS[i].equals(videoSettings.preset())) {
                     videoPresetDropdown.setSelected(i);
@@ -3041,6 +3048,9 @@ public class SettingsDialogJavaGi {
 
         try {
             ConversionSettings.Builder builder = ConversionSettings.builder();
+            int languageIndex = (int) languageDropdown.getSelected();
+            builder.language(languageIndex >= 0 && languageIndex < I18n.LANGUAGE_TAGS.size()
+                    ? I18n.LANGUAGE_TAGS.get(languageIndex) : "system");
 
             // Read general tab settings
             if (outputDirectoryEntry != null) {
@@ -3155,30 +3165,30 @@ public class SettingsDialogJavaGi {
      */
     private static String validateSettings(ConversionSettings settings) {
         if (settings == null) {
-            return "Settings object is null";
+            return I18n.tr("Settings object is null");
         }
 
         // Validate output format
         if (settings.outputFormat() == null) {
-            return "Please select an output format";
+            return I18n.tr("Please select an output format");
         }
 
         // Validate output directory
         if (settings.outputDirectory() == null) {
-            return "Please select an output directory";
+            return I18n.tr("Please select an output directory");
         }
 
         if (!settings.outputDirectory().toFile().exists()) {
-            return "Output directory does not exist: " + settings.outputDirectory();
+            return I18n.tr("Output directory does not exist: ") + settings.outputDirectory();
         }
 
         if (!settings.outputDirectory().toFile().canWrite()) {
-            return "Output directory is not writable: " + settings.outputDirectory();
+            return I18n.tr("Output directory is not writable: ") + settings.outputDirectory();
         }
 
         // Validate parallel conversions
         if (settings.parallelConversions() < 1 || settings.parallelConversions() > 16) {
-            return "Parallel conversions must be between 1 and 16";
+            return I18n.tr("Parallel conversions must be between 1 and 16");
         }
 
         // Validate format-specific settings: every dialog tab is editable, so
@@ -3189,21 +3199,21 @@ public class SettingsDialogJavaGi {
 
             // Validate bitrate
             if (video.bitrate() < VideoSettings.MIN_BITRATE || video.bitrate() > VideoSettings.MAX_BITRATE) {
-                return "Video bitrate must be between 500 and 50,000 kbps";
+                return I18n.tr("Video bitrate must be between 500 and 50,000 kbps");
             }
 
             // Validate CRF
             if (video.crf() < VideoSettings.MIN_CRF || video.crf() > VideoSettings.MAX_CRF) {
-                return "Video CRF must be between 0 and 51";
+                return I18n.tr("Video CRF must be between 0 and 51");
             }
 
             // Validate resolution if set
             if (video.resolution() != null) {
                 if (video.resolution().getWidth() < 1 || video.resolution().getHeight() < 1) {
-                    return "Video resolution dimensions must be positive";
+                    return I18n.tr("Video resolution dimensions must be positive");
                 }
                 if (video.resolution().getWidth() > 7680 || video.resolution().getHeight() > 4320) {
-                    return "Video resolution exceeds maximum (8K)";
+                    return I18n.tr("Video resolution exceeds maximum (8K)");
                 }
             }
         }
@@ -3214,12 +3224,12 @@ public class SettingsDialogJavaGi {
 
             // Validate bitrate
             if (audio.bitrate() < AudioSettings.MIN_BITRATE || audio.bitrate() > AudioSettings.MAX_BITRATE) {
-                return "Audio bitrate must be between 64 and 320 kbps";
+                return I18n.tr("Audio bitrate must be between 64 and 320 kbps");
             }
 
             // Validate quality (0-10)
             if (audio.quality() < 0 || audio.quality() > 10) {
-                return "Audio quality must be between 0 and 10";
+                return I18n.tr("Audio quality must be between 0 and 10");
             }
         }
 
@@ -3229,21 +3239,21 @@ public class SettingsDialogJavaGi {
 
             // Validate quality (0-100, or -1 for lossless)
             if (!ImageSettings.isValidQuality(image.quality())) {
-                return "Image quality must be -1 (lossless) or between 0 and 100";
+                return I18n.tr("Image quality must be -1 (lossless) or between 0 and 100");
             }
 
             // Validate compression level (0-9)
             if (image.compressionLevel() < 0 || image.compressionLevel() > 9) {
-                return "Image compression level must be between 0 and 9";
+                return I18n.tr("Image compression level must be between 0 and 9");
             }
 
             // Validate resolution if set
             if (image.resolution() != null) {
                 if (image.resolution().getWidth() < 1 || image.resolution().getHeight() < 1) {
-                    return "Image resolution dimensions must be positive";
+                    return I18n.tr("Image resolution dimensions must be positive");
                 }
                 if (image.resolution().getWidth() > 65535 || image.resolution().getHeight() > 65535) {
-                    return "Image resolution exceeds maximum (65535x65535)";
+                    return I18n.tr("Image resolution exceeds maximum (65535x65535)");
                 }
             }
         }
@@ -3254,21 +3264,21 @@ public class SettingsDialogJavaGi {
 
             // Validate template path if set
             if (document.templatePath() != null && !document.templatePath().toFile().exists()) {
-                return "Template file does not exist: " + document.templatePath();
+                return I18n.tr("Template file does not exist: ") + document.templatePath();
             }
 
             // Validate margins (0-100mm)
             if (document.marginTop() < 0 || document.marginTop() > 100) {
-                return "Top margin must be between 0 and 100 mm";
+                return I18n.tr("Top margin must be between 0 and 100 mm");
             }
             if (document.marginBottom() < 0 || document.marginBottom() > 100) {
-                return "Bottom margin must be between 0 and 100 mm";
+                return I18n.tr("Bottom margin must be between 0 and 100 mm");
             }
             if (document.marginLeft() < 0 || document.marginLeft() > 100) {
-                return "Left margin must be between 0 and 100 mm";
+                return I18n.tr("Left margin must be between 0 and 100 mm");
             }
             if (document.marginRight() < 0 || document.marginRight() > 100) {
-                return "Right margin must be between 0 and 100 mm";
+                return I18n.tr("Right margin must be between 0 and 100 mm");
             }
         }
 
@@ -3289,11 +3299,11 @@ public class SettingsDialogJavaGi {
                 .setTransientFor(dialog)
                 .setModal(true)
                 .setMessageType(MessageType.ERROR)
-                .setText("Invalid Settings")
+                .setText(I18n.tr("Invalid Settings"))
                 .setSecondaryText(errorMessage)
                 .build();
 
-        errorDialog.addButton("OK", ResponseType.OK.getValue());
+        errorDialog.addButton(I18n.tr("OK"), ResponseType.OK.getValue());
         errorDialog.onResponse((response) -> {
             // User clicked "OK" - close the error dialog
             errorDialog.destroy();
@@ -3314,31 +3324,31 @@ public class SettingsDialogJavaGi {
      */
     private static String validatePresetName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            return "Preset name cannot be empty";
+            return I18n.tr("Preset name cannot be empty");
         }
 
         if (!name.equals(name.trim())) {
-            return "Preset name cannot start or end with spaces";
+            return I18n.tr("Preset name cannot start or end with spaces");
         }
 
         name = name.trim();
 
         // Check length
-        if (name.length() > 50) {
-            return "Preset name must be 50 characters or less";
+        if (name.codePointCount(0, name.length()) > 50) {
+            return I18n.tr("Preset name must be 50 characters or less");
         }
 
         // Check for invalid characters (allow letters, numbers, spaces, hyphens,
         // underscores)
-        if (!name.matches("^[a-zA-Z0-9 _-]+$")) {
-            return "Preset name can only contain letters, numbers, spaces, hyphens, and underscores";
+        if (!name.matches("^[\\p{L}\\p{M}\\p{N} _-]+$")) {
+            return I18n.tr("Preset name can only contain letters, numbers, spaces, hyphens, and underscores");
         }
 
         // Reserved names check
-        String lowerName = name.toLowerCase();
+        String lowerName = name.toLowerCase(java.util.Locale.ROOT);
         if (lowerName.equals("default") || lowerName.equals("none") ||
                 lowerName.equals("custom") || lowerName.startsWith("--")) {
-            return "This preset name is reserved";
+            return I18n.tr("This preset name is reserved");
         }
 
         return null; // Valid
@@ -3457,15 +3467,15 @@ public class SettingsDialogJavaGi {
         }
 
         var presetList = new org.gnome.gtk.StringList(new String[] {
-                "ultrafast - Fastest encoding, largest file",
-                "superfast - Very fast encoding",
-                "veryfast - Fast encoding",
-                "faster - Faster than default",
-                "fast - Fast encoding",
-                "medium - Balanced (default)",
-                "slow - Better compression",
-                "slower - Much better compression",
-                "veryslow - Best compression, slowest"
+                I18n.tr("ultrafast - Fastest encoding, largest file"),
+                I18n.tr("superfast - Very fast encoding"),
+                I18n.tr("veryfast - Fast encoding"),
+                I18n.tr("faster - Faster than default"),
+                I18n.tr("fast - Fast encoding"),
+                I18n.tr("medium - Balanced (default)"),
+                I18n.tr("slow - Better compression"),
+                I18n.tr("slower - Much better compression"),
+                I18n.tr("veryslow - Best compression, slowest")
         });
 
         videoPresetDropdown.setModel(presetList);
@@ -3473,9 +3483,9 @@ public class SettingsDialogJavaGi {
 
         // Set tooltips explaining speed/quality tradeoff
         videoPresetDropdown.setTooltipText(
-                "Encoding preset controls speed vs. compression efficiency tradeoff.\n" +
-                        "Faster presets = quicker encoding but larger files.\n" +
-                        "Slower presets = better compression but longer encoding time.");
+                I18n.tr("Encoding preset controls speed vs. compression efficiency tradeoff.\n") +
+                        I18n.tr("Faster presets = quicker encoding but larger files.\n") +
+                        I18n.tr("Slower presets = better compression but longer encoding time."));
 
         logger.debug("Populated video preset dropdown with {} options", 9);
     }
@@ -3493,7 +3503,7 @@ public class SettingsDialogJavaGi {
         AspectRatio[] ratios = AspectRatio.values();
         String[] displayNames = new String[ratios.length];
         for (int i = 0; i < ratios.length; i++) {
-            displayNames[i] = ratios[i].getDisplayName();
+            displayNames[i] = I18n.tr(ratios[i].getDisplayName());
         }
 
         var ratioList = new org.gnome.gtk.StringList(displayNames);
@@ -3501,9 +3511,9 @@ public class SettingsDialogJavaGi {
         videoAspectRatioDropdown.setSelected(0); // Default: Keep Original
 
         videoAspectRatioDropdown.setTooltipText(
-                "Video aspect ratio controls the width-to-height proportions.\n" +
-                        "Changing aspect ratio may add letterboxing or pillarboxing.\n" +
-                        "Keep Original preserves the source video's aspect ratio.");
+                I18n.tr("Video aspect ratio controls the width-to-height proportions.\n") +
+                        I18n.tr("Changing aspect ratio may add letterboxing or pillarboxing.\n") +
+                        I18n.tr("Keep Original preserves the source video's aspect ratio."));
 
         logger.debug("Populated video aspect ratio dropdown with {} options", ratios.length);
     }
@@ -3526,7 +3536,7 @@ public class SettingsDialogJavaGi {
                 "Opus (libopus)", // AUDIO_CODECS[2]: "libopus"
                 "Vorbis (libvorbis)", // AUDIO_CODECS[3]: "libvorbis"
                 "FLAC (flac)", // AUDIO_CODECS[4]: "flac"
-                "Copy (No Re-encode)", "PCM (WAV)", "Apple Lossless"
+                I18n.tr("Copy (No Re-encode)"), "PCM (WAV)", "Apple Lossless"
         });
 
         audioCodecDropdown.setModel(codecList);
@@ -3587,13 +3597,13 @@ public class SettingsDialogJavaGi {
         }
 
         var sampleRateList = new org.gnome.gtk.StringList(new String[] {
-                "Original",
+                I18n.tr("Original"),
                 "8000 Hz",
                 "11025 Hz",
                 "16000 Hz",
                 "22050 Hz",
                 "32000 Hz",
-                "44100 Hz (CD Quality)",
+                I18n.tr("44100 Hz (CD Quality)"),
                 "48000 Hz",
                 "88200 Hz",
                 "96000 Hz",
@@ -3616,12 +3626,12 @@ public class SettingsDialogJavaGi {
         }
 
         var channelsList = new org.gnome.gtk.StringList(new String[] {
-                "Original",
-                "Mono (1)",
-                "Stereo (2)",
+                I18n.tr("Original"),
+                I18n.tr("Mono (1)"),
+                I18n.tr("Stereo (2)"),
                 "2.1",
-                "5.1 Surround",
-                "7.1 Surround"
+                I18n.tr("5.1 Surround"),
+                I18n.tr("7.1 Surround")
         });
 
         audioChannelsDropdown.setModel(channelsList);
@@ -3640,14 +3650,14 @@ public class SettingsDialogJavaGi {
         }
 
         var resizeModeList = new org.gnome.gtk.StringList(new String[] {
-                "None - Keep original size",
-                "Fit - Scale to fit within dimensions",
-                "Fill - Scale to fill dimensions",
-                "Stretch - Stretch to exact dimensions",
-                "Lanczos - High quality resampling",
-                "Bicubic - Good quality resampling",
-                "Bilinear - Fast resampling",
-                "Nearest Neighbor - Fastest, pixelated"
+                I18n.tr("None - Keep original size"),
+                I18n.tr("Fit - Scale to fit within dimensions"),
+                I18n.tr("Fill - Scale to fill dimensions"),
+                I18n.tr("Stretch - Stretch to exact dimensions"),
+                I18n.tr("Lanczos - High quality resampling"),
+                I18n.tr("Bicubic - Good quality resampling"),
+                I18n.tr("Bilinear - Fast resampling"),
+                I18n.tr("Nearest Neighbor - Fastest, pixelated")
         });
 
         resizeModeDropdown.setModel(resizeModeList);
@@ -3686,10 +3696,10 @@ public class SettingsDialogJavaGi {
         // Array index must match ImageRotation enum ordinal for proper load/save
         // mapping
         var rotationList = new org.gnome.gtk.StringList(new String[] {
-                ImageRotation.NONE.getDisplayName(), // 0: "None"
-                ImageRotation.CLOCKWISE_90.getDisplayName(), // 1: "90° Clockwise"
-                ImageRotation.ROTATE_180.getDisplayName(), // 2: "180°"
-                ImageRotation.COUNTER_CLOCKWISE_90.getDisplayName() // 3: "90° Counter-Clockwise"
+                I18n.tr(ImageRotation.NONE.getDisplayName()), // 0: "None"
+                I18n.tr(ImageRotation.CLOCKWISE_90.getDisplayName()), // 1: "90° Clockwise"
+                I18n.tr(ImageRotation.ROTATE_180.getDisplayName()), // 2: "180°"
+                I18n.tr(ImageRotation.COUNTER_CLOCKWISE_90.getDisplayName()) // 3: "90° Counter-Clockwise"
         });
 
         imageRotationDropdown.setModel(rotationList);
@@ -3711,10 +3721,10 @@ public class SettingsDialogJavaGi {
         // Create string list with ImageFlip enum display names
         // Array index must match ImageFlip enum ordinal for proper load/save mapping
         var flipList = new org.gnome.gtk.StringList(new String[] {
-                ImageFlip.NONE.getDisplayName(), // 0: "None"
-                ImageFlip.HORIZONTAL.getDisplayName(), // 1: "Horizontal"
-                ImageFlip.VERTICAL.getDisplayName(), // 2: "Vertical"
-                ImageFlip.BOTH.getDisplayName() // 3: "Both"
+                I18n.tr(ImageFlip.NONE.getDisplayName()), // 0: "None"
+                I18n.tr(ImageFlip.HORIZONTAL.getDisplayName()), // 1: "Horizontal"
+                I18n.tr(ImageFlip.VERTICAL.getDisplayName()), // 2: "Vertical"
+                I18n.tr(ImageFlip.BOTH.getDisplayName()) // 3: "Both"
         });
 
         imageFlipDropdown.setModel(flipList);

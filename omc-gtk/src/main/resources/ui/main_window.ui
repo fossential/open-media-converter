@@ -4,7 +4,7 @@
   
   <!-- Main Application Window -->
   <object class="GtkApplicationWindow" id="mainWindow">
-    <property name="title">Open Media Converter</property>
+    <property name="title" translatable="yes">Open Media Converter</property>
     <property name="default-width">1000</property>
     <property name="default-height">700</property>
     
@@ -21,17 +21,17 @@
             
             <child>
               <object class="GtkButton" id="addFilesButton">
-                <property name="label">Add Files</property>
+                <property name="label" translatable="yes">Add Files</property>
                 <property name="icon-name">document-open-symbolic</property>
-                <property name="tooltip-text">Add files to convert</property>
+                <property name="tooltip-text" translatable="yes">Add files to convert</property>
               </object>
             </child>
             
             <child>
               <object class="GtkButton" id="addFolderButton">
-                <property name="label">Add Folder</property>
+                <property name="label" translatable="yes">Add Folder</property>
                 <property name="icon-name">folder-open-symbolic</property>
-                <property name="tooltip-text">Add folder with files to convert</property>
+                <property name="tooltip-text" translatable="yes">Add folder with files to convert</property>
               </object>
             </child>
           </object>
@@ -41,7 +41,7 @@
         <child type="end">
           <object class="GtkMenuButton" id="menuButton">
             <property name="icon-name">open-menu-symbolic</property>
-            <property name="tooltip-text">Main menu</property>
+            <property name="tooltip-text" translatable="yes">Main menu</property>
             <property name="menu-model">appMenu</property>
           </object>
         </child>
@@ -49,7 +49,7 @@
         <child type="end">
           <object class="GtkButton" id="settingsButton">
             <property name="icon-name">preferences-system-symbolic</property>
-            <property name="tooltip-text">Open settings</property>
+            <property name="tooltip-text" translatable="yes">Open settings</property>
           </object>
         </child>
       </object>
@@ -77,7 +77,7 @@
                 <!-- Column: File Name -->
                 <child>
                   <object class="GtkColumnViewColumn" id="nameColumn">
-                    <property name="title">Name</property>
+                    <property name="title" translatable="yes">Name</property>
                     <property name="expand">true</property>
                     <property name="resizable">true</property>
                     <property name="fixed-width">400</property>
@@ -87,7 +87,7 @@
                 <!-- Column: File Size -->
                 <child>
                   <object class="GtkColumnViewColumn" id="sizeColumn">
-                    <property name="title">Size</property>
+                    <property name="title" translatable="yes">Size</property>
                     <property name="resizable">true</property>
                   </object>
                 </child>
@@ -95,7 +95,7 @@
                 <!-- Column: Format -->
                 <child>
                   <object class="GtkColumnViewColumn" id="formatColumn">
-                    <property name="title">Format</property>
+                    <property name="title" translatable="yes">Format</property>
                     <property name="resizable">true</property>
                   </object>
                 </child>
@@ -103,7 +103,7 @@
                 <!-- Column: Output Format -->
                 <child>
                   <object class="GtkColumnViewColumn" id="outputFormatColumn">
-                    <property name="title">Output Format</property>
+                    <property name="title" translatable="yes">Output Format</property>
                     <property name="resizable">true</property>
                     <property name="fixed-width">120</property>
                   </object>
@@ -112,7 +112,7 @@
                 <!-- Column: Status -->
                 <child>
                   <object class="GtkColumnViewColumn" id="statusColumn">
-                    <property name="title">Status</property>
+                    <property name="title" translatable="yes">Status</property>
                     <property name="resizable">true</property>
                     <property name="fixed-width">100</property>
                   </object>
@@ -121,7 +121,7 @@
                 <!-- Column: Progress -->
                 <child>
                   <object class="GtkColumnViewColumn" id="progressColumn">
-                    <property name="title">Progress</property>
+                    <property name="title" translatable="yes">Progress</property>
                     <property name="resizable">true</property>
                     <property name="fixed-width">200</property>
                   </object>
@@ -169,7 +169,7 @@
                         
                         <child>
                           <object class="GtkLabel" id="statusLabel">
-                            <property name="label">Ready</property>
+                            <property name="label" translatable="yes">Ready</property>
                             <property name="xalign">0</property>
                           </object>
                         </child>
@@ -181,14 +181,14 @@
                             
                             <child>
                               <object class="GtkLabel" id="timeRemainingLabel">
-                                <property name="label">Time remaining: --</property>
+                                <property name="label" translatable="yes">Time remaining: --</property>
                                 <property name="xalign">0</property>
                               </object>
                             </child>
                             
                             <child>
                               <object class="GtkLabel" id="conversionSpeedLabel">
-                                <property name="label">Speed: --</property>
+                                <property name="label" translatable="yes">Speed: --</property>
                                 <property name="xalign">0</property>
                               </object>
                             </child>
@@ -206,26 +206,26 @@
                         
                         <child>
                           <object class="GtkButton" id="pauseButton">
-                            <property name="label">Pause</property>
+                            <property name="label" translatable="yes">Pause</property>
                             <property name="icon-name">media-playback-pause-symbolic</property>
-                            <property name="tooltip-text">Pause conversions</property>
+                            <property name="tooltip-text" translatable="yes">Pause conversions</property>
                           </object>
                         </child>
                         
                         <child>
                           <object class="GtkButton" id="resumeButton">
-                            <property name="label">Resume</property>
+                            <property name="label" translatable="yes">Resume</property>
                             <property name="icon-name">media-playback-start-symbolic</property>
                             <property name="visible">false</property>
-                            <property name="tooltip-text">Resume conversions</property>
+                            <property name="tooltip-text" translatable="yes">Resume conversions</property>
                           </object>
                         </child>
                         
                         <child>
                           <object class="GtkButton" id="cancelButton">
-                            <property name="label">Cancel</property>
+                            <property name="label" translatable="yes">Cancel</property>
                             <property name="icon-name">process-stop-symbolic</property>
-                            <property name="tooltip-text">Cancel all conversion processes</property>
+                            <property name="tooltip-text" translatable="yes">Cancel all conversion processes</property>
                           </object>
                         </child>
                       </object>
@@ -250,17 +250,17 @@
             <!-- Left side: Remove and Clear buttons -->
             <child>
               <object class="GtkButton" id="removeSelectedButton">
-                <property name="label">Remove Selected</property>
+                <property name="label" translatable="yes">Remove Selected</property>
                 <property name="icon-name">list-remove-symbolic</property>
-                <property name="tooltip-text">Remove selected files from the list</property>
+                <property name="tooltip-text" translatable="yes">Remove selected files from the list</property>
               </object>
             </child>
             
             <child>
               <object class="GtkButton" id="clearAllButton">
-                <property name="label">Clear All</property>
+                <property name="label" translatable="yes">Clear All</property>
                 <property name="icon-name">edit-clear-all-symbolic</property>
-                <property name="tooltip-text">Clear all files from the list</property>
+                <property name="tooltip-text" translatable="yes">Clear all files from the list</property>
               </object>
             </child>
             
@@ -279,21 +279,21 @@
                 
                 <child>
                   <object class="GtkLabel" id="fileCountLabel">
-                    <property name="label">0 files selected</property>
+                    <property name="label" translatable="yes">0 files selected</property>
                   </object>
                 </child>
                 
                 <child>
                   <object class="GtkLabel" id="totalSizeLabel">
-                    <property name="label">0 B</property>
+                    <property name="label" translatable="yes">0 B</property>
                   </object>
                 </child>
                 
                 <child>
                   <object class="GtkButton" id="convertButton">
-                    <property name="label">Convert</property>
+                    <property name="label" translatable="yes">Convert</property>
                     <property name="icon-name">system-run-symbolic</property>
-                    <property name="tooltip-text">Start the conversion process</property>
+                    <property name="tooltip-text" translatable="yes">Start the conversion process</property>
                     <style>
                       <class name="suggested-action"/>
                     </style>
@@ -316,7 +316,7 @@
             
             <child>
               <object class="GtkLabel" id="statusBarLabel">
-                <property name="label">Ready</property>
+                <property name="label" translatable="yes">Ready</property>
                 <property name="xalign">0</property>
                 <property name="hexpand">true</property>
               </object>
@@ -331,17 +331,17 @@
   <menu id="appMenu">
     <section>
       <item>
-        <attribute name="label">About</attribute>
+        <attribute name="label" translatable="yes">About</attribute>
         <attribute name="action">app.about</attribute>
       </item>
       <item>
-        <attribute name="label">Help</attribute>
+        <attribute name="label" translatable="yes">Help</attribute>
         <attribute name="action">app.help</attribute>
       </item>
     </section>
     <section>
       <item>
-        <attribute name="label">Quit</attribute>
+        <attribute name="label" translatable="yes">Quit</attribute>
         <attribute name="action">app.quit</attribute>
       </item>
     </section>

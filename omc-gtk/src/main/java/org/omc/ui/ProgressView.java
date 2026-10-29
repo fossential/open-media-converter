@@ -128,26 +128,38 @@ public class ProgressView {
 
         if (batchProgress.paused()) {
             progressBar.setFraction(batchProgress.overallPercentage() / 100.0);
-            progressBar.setText("Paused");
+            progressBar.setText(I18n.tr("Paused"));
         } else if (batchProgress.indeterminate()) {
             progressBar.pulse();
-            progressBar.setText("Converting...");
+            progressBar.setText(I18n.tr("Converting..."));
         } else {
             progressBar.setFraction(batchProgress.overallPercentage() / 100.0);
-            progressBar.setText(String.format("%d%%", batchProgress.overallPercentage()));
+            progressBar.setText(I18n.tr("%d%%", batchProgress.overallPercentage()));
         }
 
         // Update status label with file counts
-        String status = batchProgress.formatStatusMessage();
+        String status = batchProgress.paused() ? I18n.tr("Conversion Paused")
+                : batchProgress.indeterminate()
+                        ? I18n.tr("Converting files (%d of %d finished)",
+                                batchProgress.totalFiles() - batchProgress.pendingFiles() - batchProgress.inProgressFiles(),
+                                batchProgress.totalFiles())
+                        : I18n.tr("Converting %d of %d files (%d%% complete)",
+                                batchProgress.completedFiles() + batchProgress.inProgressFiles(),
+                                batchProgress.totalFiles(), batchProgress.overallPercentage());
         statusLabel.setLabel(status);
 
-        // Update time remaining using BatchProgress formatter
-        String timeRemaining = batchProgress.formatEta();
-        timeRemainingLabel.setLabel("Time remaining: " + timeRemaining);
+        // Preserve paused/indeterminate semantics while localizing display units.
+        String timeRemaining = batchProgress.paused() ? I18n.tr("Paused")
+                : batchProgress.indeterminate() || batchProgress.estimatedTimeRemaining().isZero()
+                        || batchProgress.estimatedTimeRemaining().isNegative() ? I18n.tr("Unknown")
+                                : I18n.duration(batchProgress.estimatedTimeRemaining());
+        timeRemainingLabel.setLabel(I18n.tr("Time remaining: %s", timeRemaining));
 
-        // Update conversion speed using BatchProgress formatter
-        String speed = batchProgress.formatSpeed();
-        conversionSpeedLabel.setLabel("Speed: " + speed);
+        String speed = batchProgress.paused() ? I18n.tr("Paused")
+                : batchProgress.indeterminate() ? I18n.tr("Unknown")
+                        : batchProgress.bytesPerSecond() <= 0 ? I18n.tr("%.1f B/s", 0.0)
+                                : I18n.speed(batchProgress.bytesPerSecond());
+        conversionSpeedLabel.setLabel(I18n.tr("Speed: %s", speed));
 
         logger.debug("Overall progress updated: {} - {} at {}",
                 status, timeRemaining, speed);

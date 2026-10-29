@@ -26,3 +26,21 @@ jobs:
             # AGENTS.md).
             - name: Run tests
               run: ./docker-build.sh test
+
+            # Native GTK callbacks need a fresh JVM, separate from mocked widgets.
+            - name: Check native UI in every supported language
+              timeout-minutes: 10
+              run: |
+                  docker run --init --rm \
+                    -v "$(pwd):/app" \
+                    -v "$HOME/.m2:/home/developer/.m2" \
+                    omc-dev bash -ec '
+                      ulimit -c 0
+                      for language in en fr es de pt zh ja; do
+                        echo "Native language check: $language"
+                        xvfb-run -a mvn -B -pl omc-gtk -am test \
+                          -Domc.skipEmbeddedTools=true \
+                          -Dtest=I18nGtkTest -Dsurefire.failIfNoSpecifiedTests=false \
+                          -Domc.nativeGtk=true -Domc.language="$language"
+                      done
+                    '

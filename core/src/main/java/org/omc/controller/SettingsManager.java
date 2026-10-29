@@ -276,7 +276,11 @@ public class SettingsManager {
                 .deleteOriginalFile(defaults.deleteOriginalFile());
 
         // Global scalar fields, salvaged one by one
-        JsonNode node = root.get("parallelConversions");
+        JsonNode node = root.get("language");
+        if (node != null && node.isTextual()) {
+            builder.language(node.asText());
+        }
+        node = root.get("parallelConversions");
         if (node != null && node.isInt()
                 && node.asInt() >= org.omc.core.ValidationEngine.MIN_PARALLEL_CONVERSIONS
                 && node.asInt() <= org.omc.core.ValidationEngine.MAX_PARALLEL_CONVERSIONS) {
@@ -297,13 +301,15 @@ public class SettingsManager {
         node = root.get("outputDirectory");
         if (node != null && node.isTextual()) {
             try {
-                Path directory = Path.of(node.asText());
+                // Use the normal Path deserializer: Jackson persists paths as file: URIs,
+                // while older settings may contain plain filesystem paths.
+                Path directory = JsonUtils.getObjectMapper().treeToValue(node, Path.class);
                 if (Files.isDirectory(directory)) {
                     builder.outputDirectory(directory);
                 } else {
                     logger.warn("Discarding non-existent outputDirectory during salvage: {}", directory);
                 }
-            } catch (InvalidPathException e) {
+            } catch (IOException | InvalidPathException e) {
                 logger.warn("Discarding malformed outputDirectory during salvage: {}", node.asText());
             }
         }

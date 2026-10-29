@@ -175,7 +175,7 @@ class SettingsDialogJavaGiTest {
     @Test
     void connectChangeHandlers_tracksDropDownSelections() throws Exception {
         String[] dropDownFields = {
-                "videoFormatDropdown", "videoCodecDropdown", "videoAspectRatioDropdown",
+                "languageDropdown", "videoFormatDropdown", "videoCodecDropdown", "videoAspectRatioDropdown",
                 "videoFrameRateDropdown", "videoPresetDropdown", "audioFormatDropdown",
                 "audioCodecDropdown", "audioSampleRateDropdown", "audioChannelsDropdown",
                 "imageFormatDropdown", "resizeModeDropdown", "imageRotationDropdown",

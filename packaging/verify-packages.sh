@@ -92,10 +92,14 @@ with zipfile.ZipFile(sys.argv[1]) as jar:
     names = set(jar.namelist())
     for ui in ('ui/main_window.ui', 'ui/settings_dialog.ui'):
         assert ui in names, f'Missing packaged UI resource: {ui}'
+    for suffix in ('', '_fr', '_es', '_de', '_pt', '_zh', '_ja'):
+        catalog = f'i18n/messages{suffix}.properties'
+        assert catalog in names, f'Missing packaged language catalog: {catalog}'
+        assert jar.read(catalog).decode('utf-8').strip(), f'Empty language catalog: {catalog}'
     # A previous bundled build must never contaminate a native package.
     for tool in ('ffmpeg', 'ffprobe', 'pandoc'):
         assert not any(n.endswith('/' + tool) for n in names), f'Native jar embeds {tool}'
-print('Native jars contain UI resources and no embedded conversion tools')
+print('Native jars contain UI resources, seven language catalogs and no embedded conversion tools')
 PYNATIVES
 # AppImage carries the same application code/resources plus verified tools.
 (cd "$CHECK_ROOT" && "$APPIMAGE" --appimage-extract >/dev/null 2>&1)
@@ -164,6 +168,7 @@ import org.omc.model.VideoSettings;
 import org.omc.service.FFmpegService;
 import org.omc.service.PandocService;
 import org.omc.service.ToolDiscovery;
+import org.omc.ui.I18n;
 
 public class PackageRuntimeCheck {
     public static void main(String[] args) throws Exception {
@@ -182,10 +187,17 @@ public class PackageRuntimeCheck {
                 uiXml = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
                         .lines().collect(Collectors.joining("\n"));
             }
-            var builder = new GtkBuilder();
-            builder.addFromString(uiXml, uiXml.getBytes(StandardCharsets.UTF_8).length);
+            for (String language : List.of("en", "fr", "es", "de", "pt", "zh", "ja")) {
+                I18n.setLanguage(language);
+                require(I18n.locale().getLanguage().equals(language), "Wrong packaged display language");
+                require(language.equals("en") || !I18n.tr("Settings").equals("Settings"),
+                        "Missing packaged translation for " + language);
+                String translated = I18n.translateUi(uiXml);
+                var builder = new GtkBuilder();
+                builder.addFromString(translated, translated.getBytes(StandardCharsets.UTF_8).length);
+            }
         }
-        System.out.println("Packaged runtime, GTK resources and UI definitions passed");
+        System.out.println("Packaged runtime and GTK UI definitions passed in all seven languages");
         checkConversions(args[0], Path.of(args[1]));
     }
 

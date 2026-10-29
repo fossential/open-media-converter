@@ -7,7 +7,6 @@ import org.omc.model.ConversionSettings;
 import org.omc.model.ConversionStatus;
 import org.omc.model.ConversionTool;
 import org.omc.model.FileFormat;
-import org.omc.util.FileUtils;
 
 import org.gnome.gdk.Clipboard;
 import org.gnome.glib.GLib;
@@ -133,7 +132,7 @@ public class FileDetailsDialog {
                 logger.debug("Showing details dialog for file: {}", file.id());
             } catch (Exception e) {
                 logger.error("Error showing file details dialog", e);
-                ErrorDialog.showError(parentWindow, "Error", "Failed to display file details: " + e.getMessage());
+                ErrorDialog.showError(parentWindow, I18n.tr("Error"), I18n.tr("Failed to display file details: ") + e.getMessage());
             }
             return false;
         });
@@ -157,7 +156,7 @@ public class FileDetailsDialog {
         Window newDialog = new Window();
         dialog = newDialog;
         displayedFileId = file.id();
-        newDialog.setTitle(file.fileName() + " - Conversion Details");
+        newDialog.setTitle(I18n.tr("%s - Conversion Details", file.fileName()));
         newDialog.setTransientFor(parentWindow);
         newDialog.setModal(false);
         newDialog.setDefaultSize(700, 500);
@@ -204,21 +203,21 @@ public class FileDetailsDialog {
         headerBox.append(filenameLabel);
 
         // File path
-        Label pathLabel = new Label("Source: " + file.path().toString());
+        Label pathLabel = new Label(I18n.tr("Source: ") + file.path().toString());
         pathLabel.setXalign(0);
         pathLabel.setSelectable(true);
         pathLabel.addCssClass("dim-label");
         headerBox.append(pathLabel);
 
         // File size
-        String sizeFormatted = FileUtils.formatFileSize(file.size());
-        Label sizeLabel = new Label("Size: " + sizeFormatted);
+        String sizeFormatted = I18n.bytes(file.size());
+        Label sizeLabel = new Label(I18n.tr("Size: ") + sizeFormatted);
         sizeLabel.setXalign(0);
         sizeLabel.addCssClass("dim-label");
         headerBox.append(sizeLabel);
 
         // Input format
-        Label formatLabel = new Label("Format: " + file.format().name());
+        Label formatLabel = new Label(I18n.tr("Format: ") + file.format().name());
         formatLabel.setXalign(0);
         formatLabel.addCssClass("dim-label");
         headerBox.append(formatLabel);
@@ -264,12 +263,12 @@ public class FileDetailsDialog {
 
         // Pending message
         Label messageLabel = Label.builder().setLabel("").build();
-        messageLabel.setMarkup("<span size='large'>⏳ This file has not been converted yet</span>");
+        messageLabel.setMarkup("<span size='large'>" + escapeMarkup(I18n.tr("⏳ This file has not been converted yet")) + "</span>");
         messageLabel.setXalign(0);
         contentBox.append(messageLabel);
 
         // Source path
-        Label sourceLabel = new Label("Source: " + file.path().toString());
+        Label sourceLabel = new Label(I18n.tr("Source: ") + file.path().toString());
         sourceLabel.setXalign(0);
         sourceLabel.setSelectable(true);
         sourceLabel.setWrap(true);
@@ -277,13 +276,13 @@ public class FileDetailsDialog {
 
         // Output format info
         String outputFormat = determineOutputFormat(file);
-        Label formatLabel = new Label("Output format will be: " + outputFormat);
+        Label formatLabel = new Label(I18n.tr("Output format will be: ") + outputFormat);
         formatLabel.setXalign(0);
         contentBox.append(formatLabel);
 
         // Settings preview (if custom settings)
         if (file.hasCustomSettings() && file.settingsOverride().presetName() != null) {
-            Label presetLabel = new Label("Preset: " + file.settingsOverride().presetName());
+            Label presetLabel = new Label(I18n.tr("Preset: ") + file.settingsOverride().presetName());
             presetLabel.setXalign(0);
             contentBox.append(presetLabel);
         }
@@ -312,14 +311,14 @@ public class FileDetailsDialog {
 
         // In-progress message
         Label messageLabel = Label.builder().setLabel("").build();
-        messageLabel.setMarkup("<span size='large'>⚙️ Conversion in progress...</span>");
+        messageLabel.setMarkup("<span size='large'>" + escapeMarkup(I18n.tr("⚙️ Conversion in progress...")) + "</span>");
         messageLabel.setXalign(0);
         contentBox.append(messageLabel);
 
         // Progress bar
         ProgressBar progressBar = new ProgressBar();
         progressBar.setFraction(file.progress() / 100.0);
-        progressBar.setText(file.progress() + "%");
+        progressBar.setText(I18n.tr("%d%%", file.progress()));
         progressBar.setShowText(true);
         contentBox.append(progressBar);
 
@@ -327,22 +326,22 @@ public class FileDetailsDialog {
         ConversionProgress progressInfo = file.progressInfo();
         if (progressInfo != null) {
             // Conversion speed (using formatSpeed for display)
-            String speedStr = progressInfo.formatSpeed();
-            Label speedLabel = new Label("Speed: " + speedStr);
+            String speedStr = I18n.speed(progressInfo.bytesPerSecond());
+            Label speedLabel = new Label(I18n.tr("Speed: ") + speedStr);
             speedLabel.setXalign(0);
             contentBox.append(speedLabel);
 
             // Estimated time remaining
             Duration eta = progressInfo.estimatedTimeRemaining();
             if (eta != null && !eta.isZero() && !eta.isNegative()) {
-                Label etaLabel = new Label("Estimated time remaining: " + formatDuration(eta));
+                Label etaLabel = new Label(I18n.tr("Estimated time remaining: ") + formatDuration(eta));
                 etaLabel.setXalign(0);
                 contentBox.append(etaLabel);
             }
         }
 
         // Note about real-time output
-        Label noteLabel = new Label("Tool output will be available after conversion completes.");
+        Label noteLabel = new Label(I18n.tr("Tool output will be available after conversion completes."));
         noteLabel.setXalign(0);
         noteLabel.addCssClass("dim-label");
         contentBox.append(noteLabel);
@@ -368,13 +367,13 @@ public class FileDetailsDialog {
 
         // Success message
         Label messageLabel = Label.builder().setLabel("").build();
-        messageLabel.setMarkup("<span size='large'>✓ Conversion completed successfully</span>");
+        messageLabel.setMarkup("<span size='large'>" + escapeMarkup(I18n.tr("✓ Conversion completed successfully")) + "</span>");
         messageLabel.setXalign(0);
         metadataBox.append(messageLabel);
 
         if (result != null) {
             // Source path
-            Label sourceLabel = new Label("Source: " + file.path().toString());
+            Label sourceLabel = new Label(I18n.tr("Source: ") + file.path().toString());
             sourceLabel.setXalign(0);
             sourceLabel.setSelectable(true);
             sourceLabel.setWrap(true);
@@ -382,7 +381,7 @@ public class FileDetailsDialog {
 
             // Output path
             result.outputPath().ifPresent(outputPath -> {
-                Label outputLabel = new Label("Output: " + outputPath.toString());
+                Label outputLabel = new Label(I18n.tr("Output: ") + outputPath.toString());
                 outputLabel.setXalign(0);
                 outputLabel.setSelectable(true);
                 outputLabel.setWrap(true);
@@ -392,7 +391,7 @@ public class FileDetailsDialog {
             // Duration
             Duration conversionTime = result.conversionTime();
             if (conversionTime != null) {
-                Label durationLabel = new Label("Duration: " + formatDuration(conversionTime));
+                Label durationLabel = new Label(I18n.tr("Duration: ") + formatDuration(conversionTime));
                 durationLabel.setXalign(0);
                 metadataBox.append(durationLabel);
             }
@@ -400,15 +399,15 @@ public class FileDetailsDialog {
             // Tool used
             ConversionTool toolUsed = result.toolUsed();
             if (toolUsed != null) {
-                Label toolLabel = new Label("Tool: " + toolUsed.name());
+                Label toolLabel = new Label(I18n.tr("Tool: ") + toolUsed.name());
                 toolLabel.setXalign(0);
                 metadataBox.append(toolLabel);
             }
 
             // File size comparison
             if (result.outputSize() > 0) {
-                String outputSize = FileUtils.formatFileSize(result.outputSize());
-                Label sizeLabel = new Label("Output size: " + outputSize);
+                String outputSize = I18n.bytes(result.outputSize());
+                Label sizeLabel = new Label(I18n.tr("Output size: ") + outputSize);
                 sizeLabel.setXalign(0);
                 metadataBox.append(sizeLabel);
             }
@@ -418,7 +417,7 @@ public class FileDetailsDialog {
 
         // Tool output section
         if (result != null && result.toolOutput().isPresent()) {
-            Label outputHeaderLabel = new Label("Tool Output:");
+            Label outputHeaderLabel = new Label(I18n.tr("Tool Output:"));
             outputHeaderLabel.setXalign(0);
             outputHeaderLabel.setMarginTop(6);
             container.append(outputHeaderLabel);
@@ -436,7 +435,7 @@ public class FileDetailsDialog {
             scrolledWindow.setChild(textView);
             container.append(scrolledWindow);
         } else {
-            Label noOutputLabel = new Label("No output available");
+            Label noOutputLabel = new Label(I18n.tr("No output available"));
             noOutputLabel.setXalign(0);
             noOutputLabel.addCssClass("dim-label");
             container.append(noOutputLabel);
@@ -462,7 +461,7 @@ public class FileDetailsDialog {
 
         // Failed message
         Label messageLabel = Label.builder().setLabel("").build();
-        messageLabel.setMarkup("<span size='large'>✗ Conversion failed</span>");
+        messageLabel.setMarkup("<span size='large'>" + escapeMarkup(I18n.tr("✗ Conversion failed")) + "</span>");
         messageLabel.setXalign(0);
         errorBox.append(messageLabel);
 
@@ -473,7 +472,7 @@ public class FileDetailsDialog {
         }
 
         if (errorMessage != null) {
-            Label errorLabel = new Label("Error: " + errorMessage);
+            Label errorLabel = new Label(I18n.tr("Error: ") + errorMessage);
             errorLabel.setXalign(0);
             errorLabel.setWrap(true);
             errorLabel.setMaxWidthChars(80);
@@ -482,7 +481,7 @@ public class FileDetailsDialog {
         }
 
         // Source path
-        Label sourceLabel = new Label("Source: " + file.path().toString());
+        Label sourceLabel = new Label(I18n.tr("Source: ") + file.path().toString());
         sourceLabel.setXalign(0);
         sourceLabel.setSelectable(true);
         sourceLabel.setWrap(true);
@@ -492,7 +491,7 @@ public class FileDetailsDialog {
 
         // Tool output section
         if (result != null && result.toolOutput().isPresent()) {
-            Label outputHeaderLabel = new Label("Tool Output:");
+            Label outputHeaderLabel = new Label(I18n.tr("Tool Output:"));
             outputHeaderLabel.setXalign(0);
             outputHeaderLabel.setMarginTop(6);
             container.append(outputHeaderLabel);
@@ -510,7 +509,7 @@ public class FileDetailsDialog {
             scrolledWindow.setChild(textView);
             container.append(scrolledWindow);
         } else {
-            Label noOutputLabel = new Label("No output available");
+            Label noOutputLabel = new Label(I18n.tr("No output available"));
             noOutputLabel.setXalign(0);
             noOutputLabel.addCssClass("dim-label");
             container.append(noOutputLabel);
@@ -536,19 +535,19 @@ public class FileDetailsDialog {
 
         // Cancelled message
         Label messageLabel = Label.builder().setLabel("").build();
-        messageLabel.setMarkup("<span size='large'>⚠ Conversion cancelled</span>");
+        messageLabel.setMarkup("<span size='large'>" + escapeMarkup(I18n.tr("⚠ Conversion cancelled")) + "</span>");
         messageLabel.setXalign(0);
         messageBox.append(messageLabel);
 
         // Source path
-        Label sourceLabel = new Label("Source: " + file.path().toString());
+        Label sourceLabel = new Label(I18n.tr("Source: ") + file.path().toString());
         sourceLabel.setXalign(0);
         sourceLabel.setSelectable(true);
         sourceLabel.setWrap(true);
         messageBox.append(sourceLabel);
 
         // Cancellation note
-        Label noteLabel = new Label("The conversion was cancelled before completion.");
+        Label noteLabel = new Label(I18n.tr("The conversion was cancelled before completion."));
         noteLabel.setXalign(0);
         noteLabel.addCssClass("dim-label");
         messageBox.append(noteLabel);
@@ -557,7 +556,7 @@ public class FileDetailsDialog {
 
         // Partial tool output section
         if (result != null && result.toolOutput().isPresent()) {
-            Label outputHeaderLabel = new Label("Partial Tool Output:");
+            Label outputHeaderLabel = new Label(I18n.tr("Partial Tool Output:"));
             outputHeaderLabel.setXalign(0);
             outputHeaderLabel.setMarginTop(6);
             container.append(outputHeaderLabel);
@@ -575,7 +574,7 @@ public class FileDetailsDialog {
             scrolledWindow.setChild(textView);
             container.append(scrolledWindow);
         } else {
-            Label noOutputLabel = new Label("No output available");
+            Label noOutputLabel = new Label(I18n.tr("No output available"));
             noOutputLabel.setXalign(0);
             noOutputLabel.addCssClass("dim-label");
             container.append(noOutputLabel);
@@ -599,7 +598,7 @@ public class FileDetailsDialog {
         // Copy to Clipboard button (enabled only if tool output exists)
         boolean hasOutput = result != null && result.toolOutput().isPresent();
         if (hasOutput) {
-            Button copyButton = Button.withLabel("_Copy to Clipboard");
+            Button copyButton = Button.withLabel(I18n.tr("_Copy to Clipboard"));
             copyButton.setUseUnderline(true);
             copyButton.onClicked(() -> {
                 copyToolOutputToClipboard(result, dialogWindow, copyButton);
@@ -609,7 +608,7 @@ public class FileDetailsDialog {
 
         // Close button: closes exactly the window this footer was built for,
         // not whichever window the mutable dialog field currently references.
-        Button closeButton = Button.withLabel("_Close");
+        Button closeButton = Button.withLabel(I18n.tr("_Close"));
         closeButton.setUseUnderline(true);
         closeButton.onClicked(dialogWindow::close);
         buttonBox.append(closeButton);
@@ -643,7 +642,7 @@ public class FileDetailsDialog {
             showCopyConfirmation(copyButton);
         } catch (Exception e) {
             logger.error("Failed to copy to clipboard", e);
-            ErrorDialog.showError(parentWindow, "Copy Failed", "Failed to copy tool output to clipboard");
+            ErrorDialog.showError(parentWindow, I18n.tr("Copy Failed"), I18n.tr("Failed to copy tool output to clipboard"));
         }
     }
 
@@ -654,7 +653,7 @@ public class FileDetailsDialog {
      */
     private void showCopyConfirmation(Button copyButton) {
         String originalLabel = copyButton.getLabel();
-        copyButton.setLabel("Copied!");
+        copyButton.setLabel(I18n.tr("Copied!"));
         // Revert after 2 seconds
         GLib.timeoutAdd(GLib.PRIORITY_DEFAULT, 2000, () -> {
             copyButton.setLabel(originalLabel);
@@ -685,10 +684,10 @@ public class FileDetailsDialog {
                 return outputFormat.name();
             } else {
                 return file.settingsOverride().presetName() != null ? file.settingsOverride().presetName()
-                        : "Custom settings";
+                        : I18n.tr("Custom settings");
             }
         }
-        return "Global settings";
+        return I18n.tr("Global settings");
     }
 
     /**
@@ -698,21 +697,7 @@ public class FileDetailsDialog {
      * @return Formatted duration string (e.g., "1m 23s")
      */
     private String formatDuration(Duration duration) {
-        if (duration == null) {
-            return "N/A";
-        }
-
-        long seconds = duration.getSeconds();
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
-
-        if (hours > 0) {
-            return String.format("%dh %dm %ds", hours, minutes % 60, seconds % 60);
-        } else if (minutes > 0) {
-            return String.format("%dm %ds", minutes, seconds % 60);
-        } else {
-            return String.format("%ds", seconds);
-        }
+        return I18n.duration(duration);
     }
 
     /**

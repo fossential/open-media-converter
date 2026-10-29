@@ -172,4 +172,17 @@ public class SettingsDialogPresetValidationTest {
         method.setAccessible(true);
         return method;
     }
+
+    @Test
+    void acceptsNamesInEverySupportedLanguage() throws ReflectiveOperationException {
+        Method method = SettingsDialogJavaGi.class.getDeclaredMethod("validatePresetName", String.class);
+        method.setAccessible(true);
+        for (String name : new String[] { "Vidéo été", "Vídeo español", "Größe", "Áudio português", "高清视频", "高画質動画", "Cafe\u0301" }) {
+            assertNull(method.invoke(null, name), name);
+        }
+        // A supplementary CJK letter is one code point, despite occupying two UTF-16 chars.
+        assertNull(method.invoke(null, "\uD840\uDC00".repeat(50)));
+        assertNotNull(method.invoke(null, "\uD840\uDC00".repeat(51)));
+        assertNotNull(method.invoke(null, "../préréglage"));
+    }
 }

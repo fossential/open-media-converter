@@ -29,7 +29,7 @@ import org.omc.ui.logging.LoggingConfiguration;
 public class MainApplicationJavaGi extends Application {
     private static final Logger logger = LoggerFactory.getLogger(MainApplicationJavaGi.class);
     private static final String VERSION = MainApplicationJavaGi.class.getPackage().getImplementationVersion() == null
-            ? "0.1.2" : MainApplicationJavaGi.class.getPackage().getImplementationVersion();
+            ? "0.1.3" : MainApplicationJavaGi.class.getPackage().getImplementationVersion();
 
     // Application components
     private MainWindowJavaGi mainWindow;
@@ -211,11 +211,13 @@ public class MainApplicationJavaGi extends Application {
             // Create dependency factory and initialize all dependencies
             initializeDependencies();
 
-            // Create main window
-            mainWindow = new MainWindowJavaGi(this, controller);
-
-            // Initialize controller (loads settings and state from disk)
+            // Load settings once before constructing translated widgets. Recovery can
+            // move a damaged settings file aside, so a second read would lose salvaged preferences.
             controller.initialize();
+            I18n.setLanguage(controller.getCurrentSettings().language());
+
+            // Create main window using the loaded display language.
+            mainWindow = new MainWindowJavaGi(this, controller);
 
             // Restore sort state AFTER controller initialization
             // Requirement REQ-FL-4.5: Restore file list sort state from persisted state
@@ -259,7 +261,7 @@ public class MainApplicationJavaGi extends Application {
 
         } catch (Exception e) {
             logger.error("Failed to initialize application", e);
-            System.err.println("Failed to initialize application: " + e.getMessage());
+            System.err.println(I18n.tr("Failed to initialize application: ") + e.getMessage());
             System.exit(1);
         }
     }
@@ -468,12 +470,12 @@ public class MainApplicationJavaGi extends Application {
                         logger.warn("Custom config directory does not exist, will be created: {}", customConfigDir);
                     } else if (!Files.isDirectory(configPath)) {
                         logger.error("Custom config path is not a directory: {}", customConfigDir);
-                        System.err.println("Error: --config-dir path is not a directory: " + customConfigDir);
+                        System.err.println(I18n.tr("Error: --config-dir path is not a directory: ") + customConfigDir);
                         throw new IllegalArgumentException("--config-dir path is not a directory: " + customConfigDir);
                     }
                 } else {
                     logger.error("--config-dir flag requires a directory path argument");
-                    System.err.println("Error: --config-dir requires a directory path argument");
+                    System.err.println(I18n.tr("Error: --config-dir requires a directory path argument"));
                     printUsage();
                     throw new IllegalArgumentException("--config-dir requires a directory path argument");
                 }
@@ -483,7 +485,7 @@ public class MainApplicationJavaGi extends Application {
             // Unknown flag starting with --
             if (arg.startsWith("--")) {
                 logger.warn("Unknown command-line flag: {}", arg);
-                System.err.println("Warning: Unknown flag: " + arg);
+                System.err.println(I18n.tr("Warning: Unknown flag: ") + arg);
                 continue;
             }
 
@@ -497,14 +499,14 @@ public class MainApplicationJavaGi extends Application {
                 } else if (Files.isDirectory(filePath)) {
                     logger.warn("Ignoring directory argument (use Add Folder in UI): {}", arg);
                     System.err.println(
-                            "Warning: Directories not supported via command-line, use Add Folder in UI: " + arg);
+                            I18n.tr("Warning: Directories not supported via command-line, use Add Folder in UI: ") + arg);
                 } else {
                     logger.warn("File not readable: {}", arg);
-                    System.err.println("Warning: File not readable: " + arg);
+                    System.err.println(I18n.tr("Warning: File not readable: ") + arg);
                 }
             } else {
                 logger.warn("File not found: {}", arg);
-                System.err.println("Warning: File not found: " + arg);
+                System.err.println(I18n.tr("Warning: File not found: ") + arg);
             }
         }
 
@@ -529,26 +531,26 @@ public class MainApplicationJavaGi extends Application {
      * Requirement REQ-001.1: --help flag support
      */
     private static void printUsage() {
-        System.out.println("Open Media Converter - Media and Document Conversion Tool");
+        System.out.println(I18n.tr("Open Media Converter - Media and Document Conversion Tool"));
         System.out.println();
-        System.out.println("Usage: open-media-converter [OPTIONS] [FILES...]");
+        System.out.println(I18n.tr("Usage: open-media-converter [OPTIONS] [FILES...]"));
         System.out.println();
-        System.out.println("Options:");
-        System.out.println("  --help, -h              Show this help message and exit");
-        System.out.println("  --settings              Open the Settings dialog");
-        System.out.println("  --version, -v           Show version information and exit");
-        System.out.println("  --debug                 Enable debug logging");
+        System.out.println(I18n.tr("Options:"));
+        System.out.println(I18n.tr("  --help, -h              Show this help message and exit"));
+        System.out.println(I18n.tr("  --settings              Open the Settings dialog"));
+        System.out.println(I18n.tr("  --version, -v           Show version information and exit"));
+        System.out.println(I18n.tr("  --debug                 Enable debug logging"));
         System.out.println(
-                "  --config-dir <path>     Override config directory (default: ~/.config/open-media-converter)");
+                I18n.tr("  --config-dir <path>     Override config directory (default: ~/.config/open-media-converter)"));
         System.out.println();
-        System.out.println("Files:");
-        System.out.println("  FILE...                 One or more file paths to preload into the application");
+        System.out.println(I18n.tr("Files:"));
+        System.out.println(I18n.tr("  FILE...                 One or more file paths to preload into the application"));
         System.out.println();
-        System.out.println("Examples:");
-        System.out.println("  open-media-converter                          # Launch with default settings");
-        System.out.println("  open-media-converter video.mp4 audio.wav      # Launch with preloaded files");
-        System.out.println("  open-media-converter --debug video.mp4        # Launch in debug mode with file");
-        System.out.println("  open-media-converter --config-dir /tmp/config # Use custom config directory");
+        System.out.println(I18n.tr("Examples:"));
+        System.out.println(I18n.tr("  open-media-converter                          # Launch with default settings"));
+        System.out.println(I18n.tr("  open-media-converter video.mp4 audio.wav      # Launch with preloaded files"));
+        System.out.println(I18n.tr("  open-media-converter --debug video.mp4        # Launch in debug mode with file"));
+        System.out.println(I18n.tr("  open-media-converter --config-dir /tmp/config # Use custom config directory"));
         System.out.println();
     }
 
@@ -559,11 +561,11 @@ public class MainApplicationJavaGi extends Application {
      */
     private static void printVersion() {
         System.out.println("Open Media Converter " + VERSION);
-        System.out.println("Built with Java " + System.getProperty("java.version"));
-        System.out.println("GTK 4 via java-gi bindings");
+        System.out.println(I18n.tr("Built with Java ") + System.getProperty("java.version"));
+        System.out.println(I18n.tr("GTK 4 via java-gi bindings"));
         System.out.println();
         System.out.println("Copyright (C) 2025 Open Media Converter Contributors");
-        System.out.println("This is free software; see the source for copying conditions.");
+        System.out.println(I18n.tr("This is free software; see the source for copying conditions."));
         System.out.println();
     }
 }

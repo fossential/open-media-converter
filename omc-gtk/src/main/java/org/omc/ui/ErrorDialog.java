@@ -61,7 +61,7 @@ public class ErrorDialog {
                 logger.error("Showing error dialog: {}", title, exception);
 
                 String userMessage = exception.getMessage() != null ? exception.getMessage()
-                                : "An unexpected error occurred";
+                                : I18n.tr("An unexpected error occurred");
                 String detailsMessage = buildDetailsMessage(exception);
 
                 GLib.idleAdd(0, () -> {
@@ -133,7 +133,7 @@ public class ErrorDialog {
 
                         // Add details expander if details are provided
                         if (details != null && !details.isEmpty()) {
-                                Expander detailsExpander = new Expander("Show Details");
+                                Expander detailsExpander = new Expander(I18n.tr("Show Details"));
                                 detailsExpander.setMarginTop(12);
 
                                 ScrolledWindow scrolledWindow = new ScrolledWindow();
@@ -160,7 +160,7 @@ public class ErrorDialog {
 
                         // Copy button (if details provided)
                         if (details != null && !details.isEmpty()) {
-                                Button copyButton = Button.withLabel("_Copy Details");
+                                Button copyButton = Button.withLabel(I18n.tr("_Copy Details"));
                                 copyButton.setUseUnderline(true);
                                 final String detailsText = details;
                                 copyButton.onClicked(() -> {
@@ -170,7 +170,7 @@ public class ErrorDialog {
                         }
 
                         // OK button
-                        Button okButton = Button.withLabel("_OK");
+                        Button okButton = Button.withLabel(I18n.tr("_OK"));
                         okButton.setUseUnderline(true);
                         okButton.onClicked(() -> {
                                 dialog.close();
@@ -250,20 +250,20 @@ public class ErrorDialog {
                 StringBuilder details = new StringBuilder();
 
                 // Add exception type and message
-                details.append("Exception: ").append(exception.getClass().getSimpleName()).append("\n");
-                details.append("Message: ").append(exception.getMessage()).append("\n");
+                details.append(I18n.tr("Exception: ")).append(exception.getClass().getSimpleName()).append("\n");
+                details.append(I18n.tr("Message: ")).append(exception.getMessage()).append("\n");
 
                 // Add error code for MediaConverterException
                 if (exception instanceof MediaConverterException) {
                         MediaConverterException mme = (MediaConverterException) exception;
-                        details.append("Error Code: ").append(mme.getErrorCode().getCode()).append("\n");
+                        details.append(I18n.tr("Error Code: ")).append(mme.getErrorCode().getCode()).append("\n");
                         if (mme.getContext() != null) {
-                                details.append("Context: ").append(mme.getContext()).append("\n");
+                                details.append(I18n.tr("Context: ")).append(mme.getContext()).append("\n");
                         }
                 }
 
                 // Add stack trace
-                details.append("\nStack Trace:\n");
+                details.append(I18n.tr("\nStack Trace:\n"));
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
                 exception.printStackTrace(pw);

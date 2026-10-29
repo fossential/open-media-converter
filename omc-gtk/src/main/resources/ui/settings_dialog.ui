@@ -4,7 +4,7 @@
   
   <!-- Settings Dialog -->
   <object class="GtkDialog" id="settingsDialog">
-    <property name="title">Settings</property>
+    <property name="title" translatable="yes">Settings</property>
     <property name="modal">true</property>
     <property name="default-width">700</property>
     <property name="default-height">600</property>
@@ -18,14 +18,14 @@
         <!-- Cancel Button -->
         <child type="start">
           <object class="GtkButton" id="cancelButton">
-            <property name="label">Cancel</property>
+            <property name="label" translatable="yes">Cancel</property>
           </object>
         </child>
         
         <!-- Save Button -->
         <child type="end">
           <object class="GtkButton" id="saveButton">
-            <property name="label">Save</property>
+            <property name="label" translatable="yes">Save</property>
             <style>
               <class name="suggested-action"/>
             </style>
@@ -66,6 +66,35 @@
                         <property name="spacing">18</property>
                         
 
+                        <!-- Interface language -->
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Language</property>
+                                <property name="xalign">0</property>
+                                <style><class name="heading"/></style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropDown" id="languageDropdown">
+                                <property name="hexpand">true</property>
+                                <property name="tooltip-text" translatable="yes">Choose the application language</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Restart the application to apply the language change.</property>
+                                <property name="xalign">0</property>
+                                <property name="wrap">true</property>
+                                <style><class name="dim-label"/></style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+
                         <!-- Output Directory Section -->
                         <child>
                           <object class="GtkBox">
@@ -74,7 +103,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Output Directory</property>
+                                <property name="label" translatable="yes">Output Directory</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -89,7 +118,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Directory:</property>
+                                    <property name="label" translatable="yes">Directory:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -99,14 +128,14 @@
                                   <object class="GtkEntry" id="outputDirectoryEntry">
                                     <property name="hexpand">true</property>
                                     <property name="editable">false</property>
-                                    <property name="placeholder-text">Choose output directory...</property>
+                                    <property name="placeholder-text" translatable="yes">Choose output directory...</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="outputDirectoryButton">
                                     <property name="icon-name">folder-open-symbolic</property>
-                                    <property name="tooltip-text">Choose output directory</property>
+                                    <property name="tooltip-text" translatable="yes">Choose output directory</property>
                                   </object>
                                 </child>
                               </object>
@@ -122,7 +151,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Output Options</property>
+                                <property name="label" translatable="yes">Output Options</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -132,13 +161,13 @@
                             
                             <child>
                               <object class="GtkCheckButton" id="overwriteExistingCheckbox">
-                                <property name="label">Overwrite existing files</property>
+                                <property name="label" translatable="yes">Overwrite existing files</property>
                               </object>
                             </child>
                             
                             <child>
                               <object class="GtkCheckButton" id="createSubdirectoryCheckbox">
-                                <property name="label">Create subdirectory for each format</property>
+                                <property name="label" translatable="yes">Create subdirectory for each format</property>
                               </object>
                             </child>
                             
@@ -150,15 +179,15 @@
                                 
                                 <child>
                                   <object class="GtkCheckButton" id="deleteOriginalFileCheckbox">
-                                    <property name="label">Delete original file after successful conversion</property>
-                                    <property name="tooltip-text">⚠️ Warning: This will permanently delete source files. Use with caution!</property>
+                                    <property name="label" translatable="yes">Delete original file after successful conversion</property>
+                                    <property name="tooltip-text" translatable="yes">⚠️ Warning: This will permanently delete source files. Use with caution!</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkImage">
                                     <property name="icon-name">dialog-warning-symbolic</property>
-                                    <property name="tooltip-text">⚠️ Warning: This will permanently delete source files. Use with caution!</property>
+                                    <property name="tooltip-text" translatable="yes">⚠️ Warning: This will permanently delete source files. Use with caution!</property>
                                   </object>
                                 </child>
                               </object>
@@ -174,7 +203,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Performance</property>
+                                <property name="label" translatable="yes">Performance</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -189,7 +218,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Parallel conversions:</property>
+                                    <property name="label" translatable="yes">Parallel conversions:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -211,7 +240,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">  (1-16)</property>
+                                    <property name="label" translatable="yes">  (1-16)</property>
                                     <property name="xalign">0</property>
                                   </object>
                                 </child>
@@ -225,7 +254,7 @@
                 </property>
                 <property name="tab">
                   <object class="GtkLabel">
-                    <property name="label">General</property>
+                    <property name="label" translatable="yes">General</property>
                   </object>
                 </property>
               </object>
@@ -258,7 +287,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Preset Management</property>
+                                <property name="label" translatable="yes">Preset Management</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -273,7 +302,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Saved Presets:</property>
+                                    <property name="label" translatable="yes">Saved Presets:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -287,15 +316,15 @@
                                 
                                 <child>
                                   <object class="GtkButton" id="videoSavePresetButton">
-                                    <property name="label">Save</property>
-                                    <property name="tooltip-text">Save current settings as a preset</property>
+                                    <property name="label" translatable="yes">Save</property>
+                                    <property name="tooltip-text" translatable="yes">Save current settings as a preset</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="videoDeletePresetButton">
-                                    <property name="label">Delete</property>
-                                    <property name="tooltip-text">Delete selected preset</property>
+                                    <property name="label" translatable="yes">Delete</property>
+                                    <property name="tooltip-text" translatable="yes">Delete selected preset</property>
                                     <style>
                                       <class name="destructive-action"/>
                                     </style>
@@ -314,7 +343,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Output Format</property>
+                                <property name="label" translatable="yes">Output Format</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -329,7 +358,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Format:</property>
+                                    <property name="label" translatable="yes">Format:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -353,7 +382,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Video Codec</property>
+                                <property name="label" translatable="yes">Video Codec</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -368,7 +397,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Codec:</property>
+                                    <property name="label" translatable="yes">Codec:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -392,7 +421,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Resolution</property>
+                                <property name="label" translatable="yes">Resolution</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -407,7 +436,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Resolution:</property>
+                                    <property name="label" translatable="yes">Resolution:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -430,7 +459,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Custom:</property>
+                                    <property name="label" translatable="yes">Custom:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -438,7 +467,7 @@
                                 
                                 <child>
                                   <object class="GtkEntry" id="videoWidthEntry">
-                                    <property name="placeholder-text">Width</property>
+                                    <property name="placeholder-text" translatable="yes">Width</property>
                                     <property name="width-chars">8</property>
                                     <property name="input-purpose">number</property>
                                   </object>
@@ -446,13 +475,13 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">×</property>
+                                    <property name="label" translatable="yes">×</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkEntry" id="videoHeightEntry">
-                                    <property name="placeholder-text">Height</property>
+                                    <property name="placeholder-text" translatable="yes">Height</property>
                                     <property name="width-chars">8</property>
                                     <property name="input-purpose">number</property>
                                   </object>
@@ -470,7 +499,7 @@
                              
                              <child>
                                <object class="GtkLabel">
-                                 <property name="label">Aspect Ratio</property>
+                                 <property name="label" translatable="yes">Aspect Ratio</property>
                                  <property name="xalign">0</property>
                                  <style>
                                    <class name="heading"/>
@@ -485,7 +514,7 @@
                                  
                                  <child>
                                    <object class="GtkLabel">
-                                     <property name="label">Aspect ratio:</property>
+                                     <property name="label" translatable="yes">Aspect ratio:</property>
                                      <property name="xalign">0</property>
                                      <property name="width-chars">20</property>
                                    </object>
@@ -509,7 +538,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Bitrate</property>
+                                <property name="label" translatable="yes">Bitrate</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -524,7 +553,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Bitrate:</property>
+                                    <property name="label" translatable="yes">Bitrate:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -546,7 +575,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">kbps</property>
+                                    <property name="label" translatable="yes">kbps</property>
                                     <property name="xalign">0</property>
                                   </object>
                                 </child>
@@ -563,7 +592,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Frame Rate</property>
+                                <property name="label" translatable="yes">Frame Rate</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -578,7 +607,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Frame rate:</property>
+                                    <property name="label" translatable="yes">Frame rate:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -602,7 +631,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Encoding Preset</property>
+                                <property name="label" translatable="yes">Encoding Preset</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -617,7 +646,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Preset:</property>
+                                    <property name="label" translatable="yes">Preset:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -641,7 +670,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Constant Rate Factor (CRF)</property>
+                                <property name="label" translatable="yes">Constant Rate Factor (CRF)</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -656,7 +685,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">CRF:</property>
+                                    <property name="label" translatable="yes">CRF:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -683,7 +712,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Lower values = higher quality, larger file size</property>
+                                <property name="label" translatable="yes">Lower values = higher quality, larger file size</property>
                                 <property name="xalign">0</property>
                                 <property name="margin-start">20</property>
                                 <style>
@@ -702,7 +731,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Quality Presets</property>
+                                <property name="label" translatable="yes">Quality Presets</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -718,19 +747,19 @@
                                 
                                 <child>
                                   <object class="GtkButton" id="videoHighQualityButton">
-                                    <property name="label">High Quality</property>
+                                    <property name="label" translatable="yes">High Quality</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="videoBalancedButton">
-                                    <property name="label">Balanced</property>
+                                    <property name="label" translatable="yes">Balanced</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="videoSmallSizeButton">
-                                    <property name="label">Small Size</property>
+                                    <property name="label" translatable="yes">Small Size</property>
                                   </object>
                                 </child>
                               </object>
@@ -743,7 +772,7 @@
                 </property>
                 <property name="tab">
                   <object class="GtkLabel">
-                    <property name="label">Video</property>
+                    <property name="label" translatable="yes">Video</property>
                   </object>
                 </property>
               </object>
@@ -776,7 +805,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Preset Management</property>
+                                <property name="label" translatable="yes">Preset Management</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -791,7 +820,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Saved Presets:</property>
+                                    <property name="label" translatable="yes">Saved Presets:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -805,15 +834,15 @@
                                 
                                 <child>
                                   <object class="GtkButton" id="audioSavePresetButton">
-                                    <property name="label">Save</property>
-                                    <property name="tooltip-text">Save current settings as a preset</property>
+                                    <property name="label" translatable="yes">Save</property>
+                                    <property name="tooltip-text" translatable="yes">Save current settings as a preset</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="audioDeletePresetButton">
-                                    <property name="label">Delete</property>
-                                    <property name="tooltip-text">Delete selected preset</property>
+                                    <property name="label" translatable="yes">Delete</property>
+                                    <property name="tooltip-text" translatable="yes">Delete selected preset</property>
                                     <style>
                                       <class name="destructive-action"/>
                                     </style>
@@ -832,7 +861,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Output Format</property>
+                                <property name="label" translatable="yes">Output Format</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -847,7 +876,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Format:</property>
+                                    <property name="label" translatable="yes">Format:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -871,7 +900,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Audio Codec</property>
+                                <property name="label" translatable="yes">Audio Codec</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -886,7 +915,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Codec:</property>
+                                    <property name="label" translatable="yes">Codec:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -910,7 +939,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Bitrate</property>
+                                <property name="label" translatable="yes">Bitrate</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -925,7 +954,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Bitrate:</property>
+                                    <property name="label" translatable="yes">Bitrate:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -947,7 +976,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">kbps</property>
+                                    <property name="label" translatable="yes">kbps</property>
                                     <property name="xalign">0</property>
                                   </object>
                                 </child>
@@ -964,7 +993,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Sample Rate</property>
+                                <property name="label" translatable="yes">Sample Rate</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -979,7 +1008,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Sample rate:</property>
+                                    <property name="label" translatable="yes">Sample rate:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1003,7 +1032,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Channels</property>
+                                <property name="label" translatable="yes">Channels</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1018,7 +1047,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Channels:</property>
+                                    <property name="label" translatable="yes">Channels:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1042,7 +1071,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Quality</property>
+                                <property name="label" translatable="yes">Quality</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1057,7 +1086,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Quality:</property>
+                                    <property name="label" translatable="yes">Quality:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1084,7 +1113,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Codec-specific quality setting (0-9)</property>
+                                <property name="label" translatable="yes">Codec-specific quality setting (0-9)</property>
                                 <property name="xalign">0</property>
                                 <property name="margin-start">20</property>
                                 <style>
@@ -1103,7 +1132,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Quality Presets</property>
+                                <property name="label" translatable="yes">Quality Presets</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1119,19 +1148,19 @@
                                 
                                 <child>
                                   <object class="GtkButton" id="audioHighQualityButton">
-                                    <property name="label">High Quality</property>
+                                    <property name="label" translatable="yes">High Quality</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="audioBalancedButton">
-                                    <property name="label">Balanced</property>
+                                    <property name="label" translatable="yes">Balanced</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="audioSmallSizeButton">
-                                    <property name="label">Small Size</property>
+                                    <property name="label" translatable="yes">Small Size</property>
                                   </object>
                                 </child>
                               </object>
@@ -1144,7 +1173,7 @@
                 </property>
                 <property name="tab">
                   <object class="GtkLabel">
-                    <property name="label">Audio</property>
+                    <property name="label" translatable="yes">Audio</property>
                   </object>
                 </property>
               </object>
@@ -1177,7 +1206,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Preset Management</property>
+                                <property name="label" translatable="yes">Preset Management</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1192,7 +1221,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Saved Presets:</property>
+                                    <property name="label" translatable="yes">Saved Presets:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1206,13 +1235,13 @@
                                 
                                 <child>
                                   <object class="GtkButton" id="imageSavePresetButton">
-                                    <property name="label">Save</property>
+                                    <property name="label" translatable="yes">Save</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="imageDeletePresetButton">
-                                    <property name="label">Delete</property>
+                                    <property name="label" translatable="yes">Delete</property>
                                   </object>
                                 </child>
                               </object>
@@ -1228,7 +1257,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Output Format</property>
+                                <property name="label" translatable="yes">Output Format</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1243,7 +1272,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Format:</property>
+                                    <property name="label" translatable="yes">Format:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1267,7 +1296,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Rotation</property>
+                                <property name="label" translatable="yes">Rotation</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1282,7 +1311,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Rotation:</property>
+                                    <property name="label" translatable="yes">Rotation:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1306,7 +1335,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Flip</property>
+                                <property name="label" translatable="yes">Flip</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1321,7 +1350,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Flip:</property>
+                                    <property name="label" translatable="yes">Flip:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1345,7 +1374,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Quality</property>
+                                <property name="label" translatable="yes">Quality</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1360,7 +1389,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Quality:</property>
+                                    <property name="label" translatable="yes">Quality:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1387,7 +1416,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">For JPEG and WebP (0-100)</property>
+                                <property name="label" translatable="yes">For JPEG and WebP (0-100)</property>
                                 <property name="xalign">0</property>
                                 <property name="margin-start">20</property>
                                 <style>
@@ -1406,7 +1435,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Resolution</property>
+                                <property name="label" translatable="yes">Resolution</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1421,7 +1450,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Width:</property>
+                                    <property name="label" translatable="yes">Width:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1443,7 +1472,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">px</property>
+                                    <property name="label" translatable="yes">px</property>
                                   </object>
                                 </child>
                               </object>
@@ -1456,7 +1485,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Height:</property>
+                                    <property name="label" translatable="yes">Height:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1478,7 +1507,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">px</property>
+                                    <property name="label" translatable="yes">px</property>
                                   </object>
                                 </child>
                               </object>
@@ -1486,14 +1515,14 @@
                             
                             <child>
                               <object class="GtkCheckButton" id="maintainAspectRatioCheckbox">
-                                <property name="label">Maintain aspect ratio</property>
+                                <property name="label" translatable="yes">Maintain aspect ratio</property>
                                 <property name="active">true</property>
                               </object>
                             </child>
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Set to 0 to keep original dimension</property>
+                                <property name="label" translatable="yes">Set to 0 to keep original dimension</property>
                                 <property name="xalign">0</property>
                                 <property name="margin-start">20</property>
                                 <style>
@@ -1512,7 +1541,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">PNG Compression</property>
+                                <property name="label" translatable="yes">PNG Compression</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1527,7 +1556,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Compression level:</property>
+                                    <property name="label" translatable="yes">Compression level:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1554,7 +1583,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">For PNG format (0=fastest, 9=best compression)</property>
+                                <property name="label" translatable="yes">For PNG format (0=fastest, 9=best compression)</property>
                                 <property name="xalign">0</property>
                                 <property name="margin-start">20</property>
                                 <style>
@@ -1573,7 +1602,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Resize Mode</property>
+                                <property name="label" translatable="yes">Resize Mode</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1588,7 +1617,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Resize mode:</property>
+                                    <property name="label" translatable="yes">Resize mode:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1612,7 +1641,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Quality Presets</property>
+                                <property name="label" translatable="yes">Quality Presets</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1628,19 +1657,19 @@
                                 
                                 <child>
                                   <object class="GtkButton" id="imageHighQualityButton">
-                                    <property name="label">High Quality</property>
+                                    <property name="label" translatable="yes">High Quality</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="imageBalancedButton">
-                                    <property name="label">Balanced</property>
+                                    <property name="label" translatable="yes">Balanced</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="imageSmallSizeButton">
-                                    <property name="label">Small Size</property>
+                                    <property name="label" translatable="yes">Small Size</property>
                                   </object>
                                 </child>
                               </object>
@@ -1653,7 +1682,7 @@
                 </property>
                 <property name="tab">
                   <object class="GtkLabel">
-                    <property name="label">Image</property>
+                    <property name="label" translatable="yes">Image</property>
                   </object>
                 </property>
               </object>
@@ -1686,7 +1715,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Preset Management</property>
+                                <property name="label" translatable="yes">Preset Management</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1701,7 +1730,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Saved Presets:</property>
+                                    <property name="label" translatable="yes">Saved Presets:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1715,13 +1744,13 @@
                                 
                                 <child>
                                   <object class="GtkButton" id="docSavePresetButton">
-                                    <property name="label">Save</property>
+                                    <property name="label" translatable="yes">Save</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="docDeletePresetButton">
-                                    <property name="label">Delete</property>
+                                    <property name="label" translatable="yes">Delete</property>
                                   </object>
                                 </child>
                               </object>
@@ -1737,7 +1766,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Output Format</property>
+                                <property name="label" translatable="yes">Output Format</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1752,7 +1781,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Format:</property>
+                                    <property name="label" translatable="yes">Format:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1776,7 +1805,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Template</property>
+                                <property name="label" translatable="yes">Template</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1791,7 +1820,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Template file:</property>
+                                    <property name="label" translatable="yes">Template file:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1801,21 +1830,21 @@
                                   <object class="GtkEntry" id="templateFileEntry">
                                     <property name="hexpand">true</property>
                                     <property name="editable">false</property>
-                                    <property name="placeholder-text">No template (optional)</property>
+                                    <property name="placeholder-text" translatable="yes">No template (optional)</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="templateFileButton">
                                     <property name="icon-name">document-open-symbolic</property>
-                                    <property name="tooltip-text">Choose template file</property>
+                                    <property name="tooltip-text" translatable="yes">Choose template file</property>
                                   </object>
                                 </child>
                                 
                                 <child>
                                   <object class="GtkButton" id="clearTemplateButton">
                                     <property name="icon-name">edit-clear-symbolic</property>
-                                    <property name="tooltip-text">Clear template</property>
+                                    <property name="tooltip-text" translatable="yes">Clear template</property>
                                   </object>
                                 </child>
                               </object>
@@ -1823,7 +1852,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Optional template for document formatting</property>
+                                <property name="label" translatable="yes">Optional template for document formatting</property>
                                 <property name="xalign">0</property>
                                 <property name="margin-start">20</property>
                                 <style>
@@ -1842,7 +1871,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Formatting Options</property>
+                                <property name="label" translatable="yes">Formatting Options</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1852,21 +1881,21 @@
                             
                             <child>
                               <object class="GtkCheckButton" id="preserveFormattingCheckbox">
-                                <property name="label">Preserve formatting</property>
+                                <property name="label" translatable="yes">Preserve formatting</property>
                                 <property name="active">true</property>
                               </object>
                             </child>
                             
                             <child>
                               <object class="GtkCheckButton" id="embedFontsCheckbox">
-                                <property name="label">Embed fonts (PDF output)</property>
+                                <property name="label" translatable="yes">Embed fonts (PDF output)</property>
                                 <property name="active">false</property>
                               </object>
                             </child>
                             
                             <child>
                               <object class="GtkCheckButton" id="generateTocCheckbox">
-                                <property name="label">Generate table of contents</property>
+                                <property name="label" translatable="yes">Generate table of contents</property>
                                 <property name="active">false</property>
                               </object>
                             </child>
@@ -1881,7 +1910,7 @@
                             
                             <child>
                               <object class="GtkLabel">
-                                <property name="label">Page Margins</property>
+                                <property name="label" translatable="yes">Page Margins</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="heading"/>
@@ -1897,7 +1926,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Top:</property>
+                                    <property name="label" translatable="yes">Top:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1919,7 +1948,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">mm</property>
+                                    <property name="label" translatable="yes">mm</property>
                                   </object>
                                 </child>
                               </object>
@@ -1933,7 +1962,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Bottom:</property>
+                                    <property name="label" translatable="yes">Bottom:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1955,7 +1984,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">mm</property>
+                                    <property name="label" translatable="yes">mm</property>
                                   </object>
                                 </child>
                               </object>
@@ -1969,7 +1998,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Left:</property>
+                                    <property name="label" translatable="yes">Left:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -1991,7 +2020,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">mm</property>
+                                    <property name="label" translatable="yes">mm</property>
                                   </object>
                                 </child>
                               </object>
@@ -2005,7 +2034,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">Right:</property>
+                                    <property name="label" translatable="yes">Right:</property>
                                     <property name="xalign">0</property>
                                     <property name="width-chars">20</property>
                                   </object>
@@ -2027,7 +2056,7 @@
                                 
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label">mm</property>
+                                    <property name="label" translatable="yes">mm</property>
                                   </object>
                                 </child>
                               </object>
@@ -2040,7 +2069,7 @@
                 </property>
                 <property name="tab">
                   <object class="GtkLabel">
-                    <property name="label">Document</property>
+                    <property name="label" translatable="yes">Document</property>
                   </object>
                 </property>
               </object>

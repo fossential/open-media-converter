@@ -86,6 +86,7 @@ public final class ConversionSettings {
     private final AudioSettings audioSettings;
     private final ImageSettings imageSettings;
     private final DocumentSettings documentSettings;
+    private final String language;
 
     @JsonCreator
     private ConversionSettings(
@@ -97,7 +98,8 @@ public final class ConversionSettings {
             @JsonProperty("videoSettings") VideoSettings videoSettings,
             @JsonProperty("audioSettings") AudioSettings audioSettings,
             @JsonProperty("imageSettings") ImageSettings imageSettings,
-            @JsonProperty("documentSettings") DocumentSettings documentSettings) {
+            @JsonProperty("documentSettings") DocumentSettings documentSettings,
+            @JsonProperty("language") String language) {
         this.outputDirectory = outputDirectory;
         this.overwriteExisting = overwriteExisting;
         this.createSubdirectory = createSubdirectory;
@@ -107,6 +109,16 @@ public final class ConversionSettings {
         this.audioSettings = audioSettings;
         this.imageSettings = imageSettings;
         this.documentSettings = documentSettings;
+        this.language = language == null || language.isBlank() ? "system" : language;
+    }
+
+    /**
+     * Returns the saved interface language; older settings follow the desktop locale.
+     * @return language tag, or {@code system} for automatic selection
+     */
+    @JsonProperty("language")
+    public String language() {
+        return language;
     }
 
     @JsonProperty("outputDirectory")
@@ -176,7 +188,7 @@ public final class ConversionSettings {
                 override.videoSettings() != null ? override.videoSettings() : defaults.videoSettings,
                 override.audioSettings() != null ? override.audioSettings() : defaults.audioSettings,
                 override.imageSettings() != null ? override.imageSettings() : defaults.imageSettings,
-                override.documentSettings() != null ? override.documentSettings() : defaults.documentSettings);
+                override.documentSettings() != null ? override.documentSettings() : defaults.documentSettings, language);
     }
 
     /**
@@ -193,7 +205,7 @@ public final class ConversionSettings {
                 videoSettings != null ? videoSettings : VideoSettings.builder().build(),
                 audioSettings != null ? audioSettings : AudioSettings.builder().build(),
                 imageSettings != null ? imageSettings : ImageSettings.builder().build(),
-                documentSettings != null ? documentSettings : DocumentSettings.builder().build());
+                documentSettings != null ? documentSettings : DocumentSettings.builder().build(), language);
     }
 
     /**
@@ -204,7 +216,7 @@ public final class ConversionSettings {
     public ConversionSettings withDocumentSettings(DocumentSettings settings) {
         return new ConversionSettings(outputDirectory, overwriteExisting, createSubdirectory,
                 parallelConversions, deleteOriginalFile, videoSettings, audioSettings, imageSettings,
-                Objects.requireNonNull(settings, "document settings cannot be null"));
+                Objects.requireNonNull(settings, "document settings cannot be null"), language);
     }
 
     /**
@@ -410,6 +422,17 @@ public final class ConversionSettings {
         private AudioSettings audioSettings;
         private ImageSettings imageSettings;
         private DocumentSettings documentSettings;
+        private String language = "system";
+
+        /**
+         * Sets the interface language without changing conversion options.
+         * @param language language tag, or {@code system} to follow the desktop
+         * @return this builder
+         */
+        public Builder language(String language) {
+            this.language = language;
+            return this;
+        }
 
         /**
          * Sets the output directory.
@@ -572,7 +595,8 @@ public final class ConversionSettings {
                     videoSettings,
                     audioSettings,
                     imageSettings,
-                    documentSettings);
+                    documentSettings,
+                    language);
         }
     }
 
@@ -591,14 +615,15 @@ public final class ConversionSettings {
                 Objects.equals(videoSettings, that.videoSettings) &&
                 Objects.equals(audioSettings, that.audioSettings) &&
                 Objects.equals(imageSettings, that.imageSettings) &&
-                Objects.equals(documentSettings, that.documentSettings);
+                Objects.equals(documentSettings, that.documentSettings) &&
+                Objects.equals(language, that.language);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(outputDirectory, overwriteExisting,
                 createSubdirectory, parallelConversions, deleteOriginalFile, videoSettings,
-                audioSettings, imageSettings, documentSettings);
+                audioSettings, imageSettings, documentSettings, language);
     }
 
     @Override
@@ -609,6 +634,7 @@ public final class ConversionSettings {
                 ", createSubdirectory=" + createSubdirectory +
                 ", parallelConversions=" + parallelConversions +
                 ", deleteOriginalFile=" + deleteOriginalFile +
+                ", language=" + language +
                 ", videoSettings=" + videoSettings +
                 ", audioSettings=" + audioSettings +
                 ", imageSettings=" + imageSettings +
